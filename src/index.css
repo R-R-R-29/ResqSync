@@ -3,20 +3,42 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
+  --color-primary: #E85B4A;
+  --color-primary-dark: #C94336;
+  --color-primary-light: #FDE3DF;
+  --color-background: #F8F7F5;
+  --color-surface: #FFFFFF;
+  --color-surface-secondary: #F3F1EF;
+  --color-text: #171717;
+  --color-text-secondary: #66615D;
+  --color-text-muted: #8A8580;
+  --color-border: #E6E1DD;
+  --color-success: #4F9D69;
+  --color-warning: #E5A33D;
+  --color-critical: #D94343;
+  --color-info: #5C83B6;
+
+  --font-family: 'Noto Sans', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
 }
 
 body {
   margin: 0;
+  background-color: #F8F7F5;
+  color: #171717;
   font-family: 'Noto Sans', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* UX4G Focus Ring Standard */
+/* Accessible Warm Coral Focus Ring */
 *:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(217, 56, 41, 0.4);
+  box-shadow: 0 0 0 3px rgba(232, 91, 74, 0.35);
 }
 
 /* Emergency Mode global scaler */
@@ -28,11 +50,11 @@ body.emergency-mode-active button,
 body.emergency-mode-active input,
 body.emergency-mode-active select,
 body.emergency-mode-active textarea {
-  min-height: 54px;
+  min-height: 56px;
   font-size: 16px;
 }
 
-/* Custom scrollbars */
+/* Custom smooth scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -43,11 +65,11 @@ body.emergency-mode-active textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #E6E1DD;
   border-radius: 9999px;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+::-webkit-scrollbar-thumb:hover {
+  background: #C4BFBA;
 }
 

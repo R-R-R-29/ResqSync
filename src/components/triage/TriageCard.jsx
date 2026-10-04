@@ -2,24 +2,13 @@ import React, { useState } from 'react';
 import {
   MapPin,
   Clock,
-  User,
   Edit2,
   Trash2,
   Check,
-  X,
   Cpu,
-  AlertTriangle,
-  HeartPulse,
 } from 'lucide-react';
 import { StatusBadge } from '../common/StatusBadge';
 import { UX4GButton } from '../common/UX4GButton';
-
-const STRIPE_COLORS = {
-  immediate: 'border-l-[6px] border-l-red-600',
-  delayed:   'border-l-[6px] border-l-amber-500',
-  minor:     'border-l-[6px] border-l-emerald-600',
-  expectant: 'border-l-[6px] border-l-slate-700',
-};
 
 export function TriageCard({
   record,
@@ -32,7 +21,6 @@ export function TriageCard({
   const [saving, setSaving] = useState(false);
 
   const rawLevel = (record.triageLevel || record.triage_category || 'immediate').toLowerCase();
-  const stripeClass = STRIPE_COLORS[rawLevel] || STRIPE_COLORS.immediate;
 
   // Inline edit state
   const [editName, setEditName] = useState(record.victimName || record.patient_name || '');
@@ -53,7 +41,7 @@ export function TriageCard({
   const timeStr = record.updatedAt || record.updated_at || record.createdAt || record.created_at;
   const formattedTime = timeStr
     ? new Date(timeStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    : 'Just now';
+    : '2 min ago';
 
   const handleSave = async () => {
     setSaving(true);
@@ -61,10 +49,10 @@ export function TriageCard({
       const now = new Date().toISOString();
       const updated = {
         ...record,
-        victimName: editName.trim() || record.victimName || 'Unidentified Victim',
-        patient_name: editName.trim() || record.patient_name || 'Unidentified Victim',
-        location: editLocation.trim() || record.location || 'Building B · Floor 2',
-        field_unit_id: editLocation.trim() || record.field_unit_id || 'Building B · Floor 2',
+        victimName: editName.trim() || record.victimName || 'Casualty',
+        patient_name: editName.trim() || record.patient_name || 'Casualty',
+        location: editLocation.trim() || record.location || 'Zone A',
+        field_unit_id: editLocation.trim() || record.field_unit_id || 'Zone A',
         statusNotes: editNotes.trim(),
         injuries: editNotes.trim(),
         triageLevel: editLevel,
@@ -90,76 +78,62 @@ export function TriageCard({
 
   return (
     <article
-      className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl ${stripeClass} p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative`}
+      className="bg-white border border-outline rounded-3xl p-5 shadow-soft hover:shadow-soft-md transition-all flex flex-col justify-between relative"
     >
-      {/* ── Top Line: Victim #ID + Triage Badge + Sync Status ── */}
-      <div className="flex items-start justify-between gap-2 mb-2.5">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="font-mono text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-wide">
-            {record.victimName || record.patient_name || record.tag_number || 'Victim #ID'}
+      {/* ── Top Header Line: ID + Triage Status Pill ── */}
+      <div className="flex items-start justify-between gap-3 mb-2">
+        <div>
+          <span className="text-base sm:text-lg font-black text-ink tracking-tight font-mono block">
+            {record.victimName || record.patient_name || record.tag_number || 'RSQ-1042'}
           </span>
-          <StatusBadge
-            type="triage"
-            level={rawLevel}
-            size={emergencyMode ? 'md' : 'sm'}
-          />
+          <div className="flex items-center space-x-1.5 text-xs text-ink-secondary mt-0.5">
+            <MapPin className="w-3.5 h-3.5 text-coral shrink-0" aria-hidden="true" />
+            <span className="font-medium truncate max-w-[200px]">{record.location || record.field_unit_id || 'Zone A — Building 3'}</span>
+          </div>
         </div>
 
-        {/* Sync Badge */}
+        {/* Triage Status Pill */}
         <StatusBadge
-          type="sync"
-          synced={isSynced}
-          isConflict={isConflict}
-          size="sm"
+          type="triage"
+          level={rawLevel}
+          size={emergencyMode ? 'md' : 'sm'}
         />
       </div>
 
-      {/* ── Sub-Line: Location & Team/Timestamp ── */}
-      <div className="flex flex-wrap items-center gap-y-1 gap-x-3 text-xs text-slate-500 dark:text-slate-400 mb-3">
-        <div className="flex items-center space-x-1 font-medium text-slate-700 dark:text-slate-300">
-          <MapPin className="w-3.5 h-3.5 text-aid-primary shrink-0" aria-hidden="true" />
-          <span>{record.location || record.field_unit_id || 'Building B · Floor 2'}</span>
-        </div>
-        <div className="flex items-center space-x-1">
-          <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden="true" />
-          <span>Updated {formattedTime} by {record.responderId || 'Team Alpha'}</span>
-        </div>
-      </div>
-
-      {/* ── Body: Edit Mode vs View Mode ── */}
+      {/* ── Body: Medical Notes & Summary ── */}
       {isEditing ? (
-        <div className="space-y-3 my-2 p-3.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl animate-in fade-in">
-          <div className="text-xs font-bold text-aid-primary uppercase tracking-wider">
-            Edit Casualty Details (Offline Safe)
+        <div className="space-y-3 my-3 p-4 bg-surface-secondary border border-outline rounded-2xl animate-in fade-in">
+          <div className="text-xs font-bold text-coral uppercase tracking-wider">
+            Edit Casualty Details
           </div>
 
           <div>
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-              Victim Identifier
+            <label className="text-xs font-bold text-ink block mb-1">
+              Casualty Identifier
             </label>
             <input
               type="text"
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-white"
+              className="w-full bg-white border border-outline rounded-xl px-3 py-2 text-xs text-ink"
             />
           </div>
 
           <div>
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+            <label className="text-xs font-bold text-ink block mb-1">
               Location
             </label>
             <input
               type="text"
               value={editLocation}
               onChange={(e) => setEditLocation(e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-white"
+              className="w-full bg-white border border-outline rounded-xl px-3 py-2 text-xs text-ink"
             />
           </div>
 
           <div>
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-              Triage Level
+            <label className="text-xs font-bold text-ink block mb-1">
+              Triage Status
             </label>
             <div className="grid grid-cols-4 gap-1.5">
               {[
@@ -172,10 +146,10 @@ export function TriageCard({
                   key={lvl.id}
                   type="button"
                   onClick={() => setEditLevel(lvl.id)}
-                  className={`py-1.5 px-1 rounded text-[10px] font-black uppercase border transition ${
+                  className={`py-1.5 px-1 rounded-xl text-[10px] font-bold uppercase border transition ${
                     editLevel === lvl.id
-                      ? 'bg-aid-primary text-white border-red-700 shadow-sm'
-                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                      ? 'bg-coral text-white border-coral-dark shadow-sm'
+                      : 'bg-white text-ink border-outline'
                   }`}
                 >
                   {lvl.label}
@@ -185,22 +159,22 @@ export function TriageCard({
           </div>
 
           <div>
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-              Clinical Notes
+            <label className="text-xs font-bold text-ink block mb-1">
+              Medical Notes
             </label>
             <textarea
               rows="2"
               value={editNotes}
               onChange={(e) => setEditNotes(e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2 text-xs text-slate-900 dark:text-white resize-none"
+              className="w-full bg-white border border-outline rounded-xl p-2.5 text-xs text-ink resize-none"
             />
           </div>
 
-          <div className="flex items-center justify-end space-x-2 pt-1 border-t border-slate-200 dark:border-slate-700">
+          <div className="flex items-center justify-end space-x-2 pt-1 border-t border-outline">
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 min-h-[36px]"
+              className="px-3 py-1.5 text-xs font-semibold text-ink-muted hover:text-ink min-h-[36px]"
             >
               Cancel
             </button>
@@ -211,45 +185,52 @@ export function TriageCard({
               disabled={saving}
               onClick={handleSave}
             >
-              {saving ? 'Saving...' : 'Save Changes'}
+              {saving ? 'Saving...' : 'Save'}
             </UX4GButton>
           </div>
         </div>
       ) : (
-        <div className="my-1.5 flex-1">
-          {/* Clinical Notes snippet */}
-          <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 rounded-xl p-3 text-xs text-slate-700 dark:text-slate-300 min-h-[46px]">
-            <span className="font-bold text-slate-500 dark:text-slate-400 block text-[10px] uppercase mb-0.5 tracking-wider">
-              Clinical Notes
+        <div className="my-3 flex-1">
+          <div className="bg-surface-secondary border border-outline/70 rounded-2xl p-3.5 text-xs text-ink">
+            <span className="font-bold text-ink-muted block text-[10px] uppercase tracking-wider mb-1">
+              Medical Assessment
             </span>
-            <p className="line-clamp-2">
-              {record.statusNotes || record.injuries || 'No clinical observations entered.'}
+            <p className="line-clamp-2 leading-relaxed font-medium">
+              {record.statusNotes || record.injuries || 'No medical trauma observations recorded.'}
             </p>
           </div>
         </div>
       )}
 
-      {/* ── Footer: Device ID & Action Controls ── */}
+      {/* ── Footer: Sync Pill + Time + Actions ── */}
       {!isEditing && (
-        <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
-          <div className="flex items-center space-x-1 text-slate-400 text-[11px] font-mono">
-            <Cpu className="w-3 h-3 text-slate-400" aria-hidden="true" />
-            <span className="truncate max-w-[120px]">{record.deviceId || 'DEV-TEAM-01'}</span>
+        <div className="mt-1 pt-3 border-t border-[#F3F1EF] flex items-center justify-between text-xs">
+          <div className="flex items-center space-x-2">
+            <StatusBadge
+              type="sync"
+              synced={isSynced}
+              isConflict={isConflict}
+              size="sm"
+            />
+            <span className="text-[11px] text-ink-muted flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              <span>{formattedTime}</span>
+            </span>
           </div>
 
           <div className="flex items-center space-x-1.5">
             {confirmDelete ? (
-              <div className="flex items-center space-x-1 bg-red-50 dark:bg-red-950/80 border border-red-300 dark:border-red-700 p-1 rounded-lg animate-in fade-in">
-                <span className="text-[11px] font-bold text-red-700 dark:text-red-300 px-1">Delete?</span>
+              <div className="flex items-center space-x-1 bg-[#FDE3DF] border border-[#FBCBC4] p-1 rounded-full animate-in fade-in">
+                <span className="text-[11px] font-bold text-[#C94336] px-1.5">Delete?</span>
                 <button
                   onClick={handleDelete}
-                  className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[11px] font-bold min-h-[32px]"
+                  className="px-2.5 py-1 bg-[#D94343] hover:bg-[#C94336] text-white rounded-full text-[11px] font-bold min-h-[30px]"
                 >
                   Yes
                 </button>
                 <button
                   onClick={() => setConfirmDelete(false)}
-                  className="px-2 py-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 text-[11px] min-h-[32px]"
+                  className="px-2 py-1 text-ink-secondary hover:text-ink text-[11px] min-h-[30px]"
                 >
                   No
                 </button>
@@ -257,20 +238,20 @@ export function TriageCard({
             ) : (
               <button
                 onClick={() => setConfirmDelete(true)}
-                className="min-h-[40px] min-w-[40px] p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 transition flex items-center justify-center"
-                title="Soft delete casualty record"
+                className="min-h-[38px] min-w-[38px] p-2 rounded-full text-ink-muted hover:text-coral hover:bg-surface-secondary transition flex items-center justify-center"
+                title="Soft delete casualty"
                 aria-label={`Delete record for ${record.victimName || record.patient_name}`}
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-3.5 h-3.5" />
               </button>
             )}
 
             <button
               onClick={() => setIsEditing(true)}
-              className="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition flex items-center space-x-1"
+              className="min-h-[38px] px-3.5 py-1.5 rounded-full text-xs font-bold bg-surface-secondary hover:bg-[#EAE6E2] text-ink border border-outline transition flex items-center space-x-1.5"
               aria-label={`Edit record for ${record.victimName || record.patient_name}`}
             >
-              <Edit2 className="w-3.5 h-3.5" />
+              <Edit2 className="w-3 h-3 text-coral" />
               <span>Edit</span>
             </button>
           </div>

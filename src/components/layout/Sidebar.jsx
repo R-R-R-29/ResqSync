@@ -5,11 +5,9 @@ import {
   MapPin,
   AlertTriangle,
   Settings,
-  Radio,
   Wifi,
   WifiOff,
   PhoneCall,
-  ShieldAlert,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
@@ -26,7 +24,7 @@ export function Sidebar({
   emergencyMode = false,
 }) {
   const NAV_ITEMS = [
-    { id: 'dashboard', label: 'Dashboard', icon: Home, count: null },
+    { id: 'dashboard', label: 'Home', icon: Home, count: null },
     { id: 'records', label: 'Casualties', icon: Users, count: recordsCount },
     { id: 'map', label: 'Map / Field', icon: MapPin, count: null },
     {
@@ -41,40 +39,40 @@ export function Sidebar({
 
   return (
     <aside
-      className={`hidden md:flex flex-col bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-all duration-200 select-none ${
+      className={`hidden md:flex flex-col bg-white border-r border-outline transition-all duration-200 select-none ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
-      aria-label="Desktop Tactical Navigation"
+      aria-label="Desktop Navigation"
     >
       {/* ── Top Sync Status Card ── */}
-      <div className="p-3 border-b border-slate-200 dark:border-slate-800">
+      <div className="p-3.5 border-b border-[#F3F1EF]">
         <div
-          className={`rounded-xl p-3 border transition-colors ${
+          className={`rounded-2xl p-3 border transition-colors ${
             !isOnline
-              ? 'bg-amber-50 border-amber-300 dark:bg-amber-950/50 dark:border-amber-700'
+              ? 'bg-[#FEF3C7] border-[#FDE68A]'
               : conflictCount > 0
-              ? 'bg-red-50 border-red-300 dark:bg-red-950/50 dark:border-red-700'
-              : 'bg-emerald-50 border-emerald-300 dark:bg-emerald-950/40 dark:border-emerald-800'
+              ? 'bg-[#FDE3DF] border-[#FBCBC4]'
+              : 'bg-[#ECFDF5] border-[#A7F3D0]'
           }`}
         >
           <div className="flex items-center space-x-2.5">
             <div className="shrink-0">
               {!isOnline ? (
-                <WifiOff className="w-5 h-5 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+                <WifiOff className="w-5 h-5 text-[#E5A33D]" aria-hidden="true" />
               ) : conflictCount > 0 ? (
-                <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 animate-bounce" aria-hidden="true" />
+                <AlertTriangle className="w-5 h-5 text-[#D94343] animate-bounce" aria-hidden="true" />
               ) : (
-                <Wifi className="w-5 h-5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                <Wifi className="w-5 h-5 text-[#4F9D69]" aria-hidden="true" />
               )}
             </div>
             {!isCollapsed && (
               <div className="min-w-0 flex-1">
-                <div className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-100 truncate">
-                  {!isOnline ? 'Offline Field' : conflictCount > 0 ? 'Conflict Alert' : 'Command Synced'}
+                <div className="text-xs font-bold text-ink truncate">
+                  {!isOnline ? 'Offline Safe' : conflictCount > 0 ? 'Conflict Alert' : 'Command Synced'}
                 </div>
-                <div className="text-[11px] font-mono text-slate-600 dark:text-slate-400 truncate">
+                <div className="text-[11px] text-ink-secondary truncate">
                   {!isOnline
-                    ? `${pendingCount} queued in outbox`
+                    ? `${pendingCount} saved in outbox`
                     : conflictCount > 0
                     ? `${conflictCount} reviews required`
                     : 'Real-time WebSocket'}
@@ -86,7 +84,7 @@ export function Sidebar({
       </div>
 
       {/* ── Main Navigation List ── */}
-      <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
+      <nav className="flex-1 p-3.5 space-y-1.5 overflow-y-auto">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -95,14 +93,14 @@ export function Sidebar({
             <button
               key={item.id}
               onClick={() => onSelectTab(item.id)}
-              className={`w-full flex items-center rounded-xl transition-all font-bold ${
-                emergencyMode ? 'min-h-[56px] text-base px-4' : 'min-h-[48px] text-sm px-3.5'
+              className={`w-full flex items-center rounded-full transition-all font-bold ${
+                emergencyMode ? 'min-h-[56px] text-base px-4' : 'min-h-[46px] text-sm px-4'
               } ${
                 isActive
-                  ? 'bg-aid-primary text-white shadow-aid-raised'
+                  ? 'bg-coral text-white shadow-aid-raised'
                   : item.highlight
-                  ? 'bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-950/60 dark:text-red-300'
-                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  ? 'bg-[#FDE3DF] text-[#C94336] hover:bg-[#FBCBC4]/60'
+                  : 'text-ink-secondary hover:bg-surface-secondary hover:text-ink'
               }`}
               title={item.label}
               aria-current={isActive ? 'page' : undefined}
@@ -119,8 +117,8 @@ export function Sidebar({
                     isActive
                       ? 'bg-white/20 text-white'
                       : item.highlight
-                      ? 'bg-red-600 text-white'
-                      : 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
+                      ? 'bg-[#D94343] text-white'
+                      : 'bg-surface-secondary text-ink'
                   }`}
                 >
                   {item.count}
@@ -132,15 +130,15 @@ export function Sidebar({
       </nav>
 
       {/* ── Emergency SOS / Quick Contact Bar ── */}
-      <div className="p-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
+      <div className="p-3.5 border-t border-[#F3F1EF] space-y-2">
         {!isCollapsed && (
-          <div className="p-3 rounded-xl bg-aid-light dark:bg-slate-800/80 border border-aid-border/40 dark:border-slate-700">
-            <div className="flex items-center space-x-2 text-aid-primary font-bold text-xs uppercase tracking-wider mb-1">
+          <div className="p-3.5 rounded-2xl bg-coral-light/50 border border-coral-light">
+            <div className="flex items-center space-x-2 text-coral font-bold text-xs uppercase tracking-wider mb-1">
               <PhoneCall className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>National Disaster Hotline</span>
+              <span>Emergency Helpline</span>
             </div>
-            <div className="text-lg font-black text-slate-900 dark:text-white font-mono">
-              1078 <span className="text-xs text-slate-500 font-normal">/ 112 SOS</span>
+            <div className="text-base font-black text-ink font-mono">
+              1078 <span className="text-xs text-ink-muted font-normal">/ 112 SOS</span>
             </div>
           </div>
         )}
@@ -149,7 +147,7 @@ export function Sidebar({
         {setIsCollapsed && (
           <button
             onClick={() => setIsCollapsed((v) => !v)}
-            className="w-full flex items-center justify-center p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-xs font-semibold"
+            className="w-full flex items-center justify-center p-2 rounded-full text-ink-muted hover:text-ink hover:bg-surface-secondary transition text-xs font-semibold"
             title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
             aria-label={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
           >

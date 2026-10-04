@@ -118,7 +118,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-aid-surface dark:bg-aid-darkSurface text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors pb-24 md:pb-20">
+    <div className="min-h-screen bg-[#F8F7F5] text-ink flex flex-col font-sans transition-colors pb-24 md:pb-20">
       
       {/* ── 1. Top High-Contrast Offline / Connectivity Status Bar (UX4G Standard) ── */}
       <OfflineBanner

@@ -11,66 +11,103 @@ export default {
         sans: ['"Noto Sans"', '"Noto Sans Devanagari"', 'system-ui', '-apple-system', 'sans-serif'],
       },
       colors: {
-        // AidConnect & UX4G Brand Tokens
-        aid: {
-          primary: '#D93829',      // Terracotta Red / Crimson
-          hover: '#B91C1C',        // Deep Terracotta Hover
-          light: '#FDF2F1',        // Soft Coral tint
-          border: '#F87171',       // Coral accent border
-          surface: '#F8F9FA',      // Soft Off-White light mode
-          card: '#FFFFFF',         // Pure White Card
-          borderLight: '#E2E8F0',  // Subtle grey border
-          darkSurface: '#0F172A',  // Operational Dark Slate
-          darkCard: '#1E293B',     // Card Slate
-          darkBorder: '#334155',   // High-contrast slate border
+        // Primary Warm Coral Palette (from reference design)
+        coral: {
+          DEFAULT: '#E85B4A',
+          dark: '#C94336',
+          light: '#FDE3DF',
+          hover: '#D44C3B',
+          soft: '#FFF1EF',
         },
-        // Semantic High-Contrast Triage Tokens (WCAG AAA compliant)
+        // Surfaces & Backgrounds
+        canvas: '#F8F7F5',       // Soft off-white page background
+        surface: {
+          DEFAULT: '#FFFFFF',    // Crisp white card surface
+          secondary: '#F3F1EF',  // Secondary surface / inputs / chips
+          tint: '#FAFAF9',
+        },
+        // Typography & Lines
+        ink: {
+          DEFAULT: '#171717',    // Primary text
+          secondary: '#66615D',  // Secondary text
+          muted: '#8A8580',      // Muted text
+          light: '#A8A29E',
+        },
+        outline: {
+          DEFAULT: '#E6E1DD',    // Card & input border
+          subtle: '#EFECE9',
+        },
+        // Semantic High-Contrast Triage Tokens
+        semantic: {
+          success: '#4F9D69',
+          warning: '#E5A33D',
+          critical: '#D94343',
+          info: '#5C83B6',
+        },
+        // Compatibility Aliases for AidConnect
+        aid: {
+          primary: '#E85B4A',
+          hover: '#C94336',
+          light: '#FDE3DF',
+          border: '#FBCBC4',
+          surface: '#F8F7F5',
+          card: '#FFFFFF',
+          borderLight: '#E6E1DD',
+          darkSurface: '#171717',
+          darkCard: '#242424',
+          darkBorder: '#383838',
+        },
         triage: {
           immediate: {
-            DEFAULT: '#DC2626',    // Red 600
-            hover: '#B91C1C',
-            bg: '#FEF2F2',
-            border: '#F87171',
-            text: '#991B1B',
+            DEFAULT: '#D94343',
+            hover: '#C94336',
+            bg: '#FDE3DF',
+            border: '#FBCBC4',
+            text: '#C94336',
           },
           delayed: {
-            DEFAULT: '#D97706',    // Amber 600
+            DEFAULT: '#E5A33D',
             hover: '#B45309',
-            bg: '#FFFBEB',
-            border: '#FCD34D',
+            bg: '#FEF3C7',
+            border: '#FDE68A',
             text: '#92400E',
           },
           minor: {
-            DEFAULT: '#059669',    // Emerald 600
+            DEFAULT: '#4F9D69',
             hover: '#047857',
             bg: '#ECFDF5',
-            border: '#6EE7B7',
+            border: '#A7F3D0',
             text: '#065F46',
           },
           expectant: {
-            DEFAULT: '#334155',    // Slate 700
+            DEFAULT: '#475569',
             hover: '#1E293B',
-            bg: '#F1F5F9',
-            border: '#94A3B8',
-            text: '#1E293B',
+            bg: '#F3F1EF',
+            border: '#E6E1DD',
+            text: '#171717',
           },
         },
         resq: {
-          dark: '#0f172a',
-          card: '#1e293b',
-          border: '#334155',
-          immediate: '#DC2626',
-          delayed: '#D97706',
-          minor: '#059669',
-          expectant: '#334155',
+          dark: '#171717',
+          card: '#FFFFFF',
+          border: '#E6E1DD',
+          immediate: '#D94343',
+          delayed: '#E5A33D',
+          minor: '#4F9D69',
+          expectant: '#475569',
         },
       },
+      borderRadius: {
+        '2xl': '18px',
+        '3xl': '24px',
+        'pill': '9999px',
+      },
       boxShadow: {
-        'aid-card': '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03)',
-        'aid-raised': '0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04)',
-        'emergency-glow': '0 0 15px rgba(220, 38, 38, 0.35)',
-        'warning-glow': '0 0 15px rgba(217, 119, 6, 0.35)',
-        'stable-glow': '0 0 15px rgba(5, 150, 105, 0.35)',
+        'soft': '0 2px 10px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02)',
+        'soft-md': '0 4px 16px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(0, 0, 0, 0.03)',
+        'aid-card': '0 1px 4px rgba(0, 0, 0, 0.04)',
+        'aid-raised': '0 4px 14px rgba(232, 91, 74, 0.25)',
+        'emergency-glow': '0 0 15px rgba(232, 91, 74, 0.35)',
       },
       minHeight: {
         'touch': '48px',
@@ -80,9 +117,6 @@ export default {
         'touch': '48px',
         'touch-lg': '56px',
       },
-      animation: {
-        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-      }
     },
   },
   plugins: [],

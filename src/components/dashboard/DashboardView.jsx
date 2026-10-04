@@ -4,10 +4,10 @@ import {
   Truck,
   Zap,
   AlertTriangle,
-  Activity,
   ArrowRight,
-  ShieldAlert,
-  Users,
+  ShieldCheck,
+  Radio,
+  Plus,
 } from 'lucide-react';
 import { QuickAddForm } from '../triage/QuickAddForm';
 import { TriageCard } from '../triage/TriageCard';
@@ -27,49 +27,43 @@ export function DashboardView({
   onNavigateToRecords,
   onNavigateToConflicts,
 }) {
-  // 4 Large High-Contrast Summary Widgets per Prompt specification
+  // 4 Rounded Metric Cards per reference aesthetic: large numbers, concise labels
   const METRICS = [
     {
       id: 'critical',
-      title: 'Critical Casualties',
-      value: `${counts.immediate || 0} Immediate`,
-      subtitle: 'Airway / Hemorrhage Priority',
+      title: 'Critical casualties',
+      value: counts.immediate || 0,
+      subtitle: 'Immediate medical priority',
       icon: AlertCircle,
-      cardClass: 'bg-red-50 dark:bg-red-950/40 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200',
-      iconClass: 'bg-red-600 text-white',
-      badge: '🔴 TIER 1',
+      iconBg: 'bg-[#FDE3DF] text-[#C94336]',
+      borderColor: 'border-[#E6E1DD] hover:border-[#FBCBC4]',
     },
     {
       id: 'evacuation',
-      title: 'Pending Evacuation',
-      value: `${counts.delayed || 0} In Transit`,
-      subtitle: 'Ambulance & Air Transport',
+      title: 'Waiting for evacuation',
+      value: counts.delayed || 0,
+      subtitle: 'Ambulance & transport',
       icon: Truck,
-      cardClass: 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200',
-      iconClass: 'bg-amber-600 text-white',
-      badge: '🚑 AMBULANCE',
+      iconBg: 'bg-[#FEF3C7] text-[#92400E]',
+      borderColor: 'border-[#E6E1DD] hover:border-[#FDE68A]',
     },
     {
       id: 'offline',
-      title: 'Offline Changes',
-      value: `${pendingCount} Saved Locally`,
-      subtitle: 'IndexedDB Outbox Queue',
+      title: 'Saved offline on device',
+      value: pendingCount,
+      subtitle: 'Awaiting network sync',
       icon: Zap,
-      cardClass: 'bg-slate-100 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100',
-      iconClass: 'bg-slate-800 text-amber-400',
-      badge: '⚡ OUTBOX',
+      iconBg: 'bg-[#F3F1EF] text-[#66615D]',
+      borderColor: 'border-[#E6E1DD]',
     },
     {
       id: 'conflicts',
-      title: 'Unresolved Conflicts',
-      value: `${conflictCount} Need Review`,
-      subtitle: 'Dual-Device Discrepancies',
+      title: 'Conflicts requiring review',
+      value: conflictCount,
+      subtitle: conflictCount > 0 ? 'Concurrent edits detected' : 'All field edits reconciled',
       icon: AlertTriangle,
-      cardClass: conflictCount > 0
-        ? 'bg-red-100 dark:bg-red-900/60 border-red-400 text-red-900 dark:text-red-100 ring-2 ring-red-400'
-        : 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200',
-      iconClass: conflictCount > 0 ? 'bg-red-600 text-white animate-pulse' : 'bg-emerald-600 text-white',
-      badge: conflictCount > 0 ? '⚠️ ACTION NEEDED' : '✓ CLEAN',
+      iconBg: conflictCount > 0 ? 'bg-[#FDE3DF] text-[#C94336] animate-pulse' : 'bg-[#ECFDF5] text-[#065F46]',
+      borderColor: conflictCount > 0 ? 'border-[#FBCBC4] ring-2 ring-[#FDE3DF]' : 'border-[#E6E1DD]',
       onClick: conflictCount > 0 ? onNavigateToConflicts : undefined,
     },
   ];
@@ -85,35 +79,57 @@ export function DashboardView({
   return (
     <div className="space-y-6">
       
-      {/* ── 1. Top Emergency Banner (AidConnect Inspired Terracotta Card) ── */}
-      <div className="bg-aid-primary text-white rounded-3xl p-5 sm:p-7 shadow-lg relative overflow-hidden">
-        {/* Subtle background radar ring */}
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 rounded-full border border-white/10 pointer-events-none" />
+      {/* ── 1. Greeting & Context Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+        <div>
+          <span className="text-xs font-bold text-coral uppercase tracking-wider block mb-1">
+            Sector 4 Quake Response • Field Operations
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
+            Good morning, Responder
+          </h1>
+          <p className="text-xs sm:text-sm text-ink-secondary mt-0.5">
+            Zero-data-loss emergency coordination. Real-time local cache active.
+          </p>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${
+            isOnline ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]' : 'bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]'
+          }`}>
+            <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-[#4F9D69]' : 'bg-[#E5A33D]'}`} />
+            <span>{isOnline ? 'Command Linked' : 'Offline Safe Mode'}</span>
+          </span>
+        </div>
+      </div>
+
+      {/* ── 2. Prominent Emergency Card (AidConnect Reference Style) ── */}
+      <div className="bg-coral text-white rounded-3xl p-5 sm:p-7 shadow-aid-raised relative overflow-hidden">
+        {/* Soft decorative background rings */}
+        <div className="absolute -right-12 -bottom-12 w-64 h-64 rounded-full border border-white/10 pointer-events-none" />
         <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full border border-white/5 pointer-events-none" />
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
-          <div className="space-y-1.5 max-w-2xl">
-            <div className="flex items-center space-x-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-white/20 text-white">
-                FIELD OPERATIONAL MODE
-              </span>
-              <span className="text-white/80 text-xs font-mono">SECTOR 4 QUAKE RESPONSE</span>
+          <div className="space-y-2 max-w-xl">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/20 text-white">
+              <Radio className="w-3.5 h-3.5 animate-pulse" />
+              <span>Priority Action Center</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
-              ResqSync Emergency Coordination
-            </h1>
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight leading-snug">
+              Rapid Field Triage & Victim Registration
+            </h2>
 
-            <p className="text-sm text-white/90 font-medium">
-              Offline-first disaster triage coordinator aligned with UX4G Indian Emergency Digital Service Standards. Zero data loss in disconnected environments.
+            <p className="text-xs sm:text-sm text-white/90 font-medium leading-relaxed">
+              Register casualties instantly without internet connectivity. Records are cryptographically protected and automatically synchronized when networks recover.
             </p>
           </div>
 
-          {/* Emergency Mode Large Switch */}
-          <div className="bg-white/10 border border-white/20 rounded-2xl p-3.5 backdrop-blur-md self-start md:self-auto flex items-center justify-between gap-3 min-w-[220px]">
+          {/* Quick Emergency Mode Glove Switch */}
+          <div className="bg-white/15 border border-white/25 rounded-2xl p-3.5 backdrop-blur-sm self-start md:self-auto flex items-center justify-between gap-4 min-w-[210px]">
             <div>
-              <span className="font-extrabold text-xs block">Emergency Mode</span>
-              <span className="text-[11px] text-white/80">Large 56px touch controls</span>
+              <span className="font-extrabold text-xs block text-white">Glove Mode</span>
+              <span className="text-[11px] text-white/80">56px touch targets</span>
             </div>
 
             <button
@@ -126,7 +142,7 @@ export function DashboardView({
             >
               <div
                 className={`w-6 h-6 rounded-full shadow-md transform transition-transform ${
-                  emergencyMode ? 'translate-x-6 bg-aid-primary' : 'translate-x-0 bg-white'
+                  emergencyMode ? 'translate-x-6 bg-coral' : 'translate-x-0 bg-white'
                 }`}
               />
             </button>
@@ -134,8 +150,8 @@ export function DashboardView({
         </div>
       </div>
 
-      {/* ── 2. Key Metrics Cards (4 Large High-Contrast Widgets) ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+      {/* ── 3. Rounded Summary Cards (4 Large Number Cards) ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
         {METRICS.map((metric) => {
           const Icon = metric.icon;
 
@@ -143,32 +159,31 @@ export function DashboardView({
             <div
               key={metric.id}
               onClick={metric.onClick}
-              className={`p-4 sm:p-5 rounded-2xl border shadow-sm flex flex-col justify-between transition-all ${
-                metric.cardClass
-              } ${metric.onClick ? 'cursor-pointer hover:shadow-md active:scale-98' : ''}`}
+              className={`p-5 rounded-3xl bg-white border ${metric.borderColor} shadow-soft flex flex-col justify-between transition-all ${
+                metric.onClick ? 'cursor-pointer hover:shadow-soft-md active:scale-98' : ''
+              }`}
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${metric.iconClass}`}>
-                  <Icon className="w-5 h-5" aria-hidden="true" />
+              <div className="flex items-start justify-between mb-4">
+                <span className="text-xs font-bold text-ink-secondary">{metric.title}</span>
+                <div className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 ${metric.iconBg}`}>
+                  <Icon className="w-4 h-4" aria-hidden="true" />
                 </div>
-                <span className="text-[10px] font-mono font-black tracking-wider uppercase px-2 py-0.5 rounded bg-black/10 dark:bg-white/10">
-                  {metric.badge}
-                </span>
               </div>
 
               <div>
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-none mb-1">
+                <span className="text-3xl sm:text-4xl font-black text-ink tracking-tight block">
                   {metric.value}
-                </h3>
-                <span className="text-xs font-bold block opacity-90">{metric.title}</span>
-                <span className="text-[11px] opacity-75 mt-0.5 block">{metric.subtitle}</span>
+                </span>
+                <span className="text-xs text-ink-muted mt-1 block">
+                  {metric.subtitle}
+                </span>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* ── 3. Quick Casualty Registration Form ── */}
+      {/* ── 4. Quick Casualty Registration Form ── */}
       <section aria-labelledby="quick-intake-heading">
         <QuickAddForm
           onSubmit={onAddTriage}
@@ -177,21 +192,21 @@ export function DashboardView({
         />
       </section>
 
-      {/* ── 4. Urgent Field Casualties Preview ── */}
+      {/* ── 5. Urgent Field Casualties Preview ── */}
       {urgentRecords.length > 0 && (
-        <section className="space-y-3" aria-labelledby="urgent-casualties-heading">
+        <section className="space-y-3.5" aria-labelledby="urgent-casualties-heading">
           <div className="flex items-center justify-between">
-            <h2 id="urgent-casualties-heading" className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-red-600" />
+            <h2 id="urgent-casualties-heading" className="text-base font-bold text-ink flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-coral" />
               <span>Priority Critical Casualties (Sector 4)</span>
             </h2>
 
             {onNavigateToRecords && (
               <button
                 onClick={onNavigateToRecords}
-                className="text-xs font-bold text-aid-primary hover:text-aid-hover flex items-center gap-1 min-h-[36px]"
+                className="text-xs font-bold text-coral hover:text-coral-dark flex items-center gap-1 min-h-[36px]"
               >
-                <span>View All ({records.length})</span>
+                <span>View All Manifest ({records.length})</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             )}

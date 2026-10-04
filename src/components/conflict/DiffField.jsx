@@ -15,36 +15,36 @@ export function DiffField({
   customRenderer,
 }) {
   return (
-    <div className={`p-3 rounded-xl border transition-colors ${
+    <div className={`p-4 rounded-2xl border transition-colors ${
       isDifferent
-        ? 'bg-amber-50/70 border-amber-300 dark:bg-amber-950/40 dark:border-amber-700/60'
-        : 'bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'
+        ? 'bg-[#FFFBEB] border-[#FDE68A]'
+        : 'bg-surface-secondary border-outline'
     }`}>
-      <div className="flex items-center justify-between mb-1.5">
-        <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-bold text-ink-secondary uppercase tracking-wider">
           {label}
         </span>
         {isDifferent && (
-          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200">
-            Discrepancy
+          <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]">
+            Conflicting Updates
           </span>
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
         {/* Value A */}
-        <div className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
-          <span className="text-[10px] font-bold text-slate-400 block mb-0.5">{labelA}:</span>
+        <div className="bg-white p-3 rounded-xl border border-outline shadow-soft">
+          <span className="text-[11px] font-bold text-ink-muted block mb-1">{labelA}:</span>
           {customRenderer ? customRenderer(valueA, 'A') : (
-            <p className="font-semibold text-slate-800 dark:text-slate-200 break-words">{valueA || '—'}</p>
+            <p className="font-semibold text-ink break-words text-sm">{valueA || '—'}</p>
           )}
         </div>
 
         {/* Value B */}
-        <div className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
-          <span className="text-[10px] font-bold text-slate-400 block mb-0.5">{labelB}:</span>
+        <div className="bg-white p-3 rounded-xl border border-outline shadow-soft">
+          <span className="text-[11px] font-bold text-coral block mb-1">{labelB}:</span>
           {customRenderer ? customRenderer(valueB, 'B') : (
-            <p className="font-semibold text-slate-800 dark:text-slate-200 break-words">{valueB || '—'}</p>
+            <p className="font-semibold text-ink break-words text-sm">{valueB || '—'}</p>
           )}
         </div>
       </div>

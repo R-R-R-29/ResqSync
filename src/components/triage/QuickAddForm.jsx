@@ -5,48 +5,48 @@ import {
   CheckCircle2,
   Activity,
   UserPlus,
-  MapPin,
-  FileText,
-  Tag,
   Sparkles,
   Zap,
   Check,
 } from 'lucide-react';
 import { UX4GButton } from '../common/UX4GButton';
-import { InputGroup } from '../common/InputGroup';
 
 const TRIAGE_TIERS = [
   {
     id: 'immediate',
-    name: '🔴 RED - Immediate',
+    name: 'RED • Immediate',
     subtitle: 'Critical / Life-Threatening',
     icon: AlertCircle,
-    activeClasses: 'bg-red-600 text-white border-red-700 shadow-emergency-glow ring-2 ring-red-400',
-    inactiveClasses: 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-red-400',
+    activeClasses: 'bg-[#FDE3DF] text-[#C94336] border-[#FBCBC4] ring-2 ring-coral',
+    inactiveClasses: 'bg-white text-ink border-outline hover:border-[#FBCBC4]',
+    dotClass: 'bg-[#D94343]',
   },
   {
     id: 'delayed',
-    name: '🟡 YELLOW - Delayed',
+    name: 'YELLOW • Delayed',
     subtitle: 'Serious / Non-Life-Threatening',
     icon: Clock,
-    activeClasses: 'bg-amber-600 text-white border-amber-700 shadow-warning-glow ring-2 ring-amber-400',
-    inactiveClasses: 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-amber-400',
+    activeClasses: 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A] ring-2 ring-[#E5A33D]',
+    inactiveClasses: 'bg-white text-ink border-outline hover:border-[#FDE68A]',
+    dotClass: 'bg-[#E5A33D]',
   },
   {
     id: 'minor',
-    name: '🟢 GREEN - Minor',
+    name: 'GREEN • Minor',
     subtitle: 'Walking Wounded / Minimal',
     icon: CheckCircle2,
-    activeClasses: 'bg-emerald-600 text-white border-emerald-700 shadow-stable-glow ring-2 ring-emerald-400',
-    inactiveClasses: 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-emerald-400',
+    activeClasses: 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0] ring-2 ring-[#4F9D69]',
+    inactiveClasses: 'bg-white text-ink border-outline hover:border-[#A7F3D0]',
+    dotClass: 'bg-[#4F9D69]',
   },
   {
     id: 'expectant',
-    name: '⬛ BLACK - Expectant',
+    name: 'BLACK • Expectant',
     subtitle: 'Deceased / Non-Survivable',
     icon: Activity,
-    activeClasses: 'bg-slate-800 text-white border-slate-900 ring-2 ring-slate-400',
-    inactiveClasses: 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-slate-500',
+    activeClasses: 'bg-[#F3F1EF] text-ink border-[#C4BFBA] ring-2 ring-ink',
+    inactiveClasses: 'bg-white text-ink border-outline hover:border-[#C4BFBA]',
+    dotClass: 'bg-[#171717]',
   },
 ];
 
@@ -64,7 +64,7 @@ export function QuickAddForm({
   const [successToast, setSuccessToast] = useState(null);
 
   const handleGenerateId = () => {
-    const randomTag = `VIC-${Math.floor(100 + Math.random() * 900)}`;
+    const randomTag = `RSQ-${Math.floor(1000 + Math.random() * 9000)}`;
     setVictimName(randomTag);
   };
 
@@ -73,15 +73,15 @@ export function QuickAddForm({
     if (submitting) return;
 
     const trimmedName = victimName.trim();
-    const finalVictimName = trimmedName || `VIC-${Math.floor(100 + Math.random() * 900)}`;
-    const finalLocation = location.trim() || 'Building B · Floor 2';
+    const finalVictimName = trimmedName || `RSQ-${Math.floor(1000 + Math.random() * 9000)}`;
+    const finalLocation = location.trim() || 'Zone A · Building 3';
 
     setSubmitting(true);
     try {
       const record = {
         victimName: finalVictimName,
         patient_name: finalVictimName,
-        tag_number: finalVictimName.startsWith('VIC-') ? finalVictimName : `T-${Math.floor(1000 + Math.random() * 9000)}`,
+        tag_number: finalVictimName.startsWith('RSQ-') ? finalVictimName : `T-${Math.floor(1000 + Math.random() * 9000)}`,
         location: finalLocation,
         field_unit_id: finalLocation,
         statusNotes: statusNotes.trim(),
@@ -116,30 +116,30 @@ export function QuickAddForm({
 
   return (
     <div
-      className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm transition-all ${className}`}
+      className={`bg-white border border-outline rounded-3xl p-5 sm:p-7 shadow-soft transition-all ${className}`}
     >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5 pb-3.5 border-b border-[#F3F1EF]">
         <div>
-          <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-            <UserPlus className="w-5 h-5 text-aid-primary" aria-hidden="true" />
-            <span>Quick Casualty Registration</span>
+          <h2 className="text-base sm:text-lg font-bold text-ink tracking-tight flex items-center gap-2">
+            <UserPlus className="w-5 h-5 text-coral" aria-hidden="true" />
+            <span>Casualty Registration</span>
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Offline-first triage entry. Changes immediately commit to local IndexedDB.
+          <p className="text-xs text-ink-secondary mt-0.5">
+            Offline-first intake. Records are immediately persisted to local IndexedDB.
           </p>
         </div>
 
-        <div className="flex items-center space-x-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 self-start sm:self-auto">
+        <div className="flex items-center space-x-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-surface-secondary text-ink self-start sm:self-auto">
           {isOnline ? (
             <>
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span>Direct Sync Ready</span>
+              <span className="w-2 h-2 rounded-full bg-[#4F9D69]" />
+              <span>Direct Sync</span>
             </>
           ) : (
             <>
-              <Zap className="w-3.5 h-3.5 text-amber-500" />
-              <span>Queued in Offline Outbox</span>
+              <Zap className="w-3.5 h-3.5 text-[#E5A33D]" />
+              <span>Outbox Queued</span>
             </>
           )}
         </div>
@@ -147,10 +147,10 @@ export function QuickAddForm({
 
       <form onSubmit={handleSubmit} className="space-y-4">
         
-        {/* 1. Triage Severity Selector (Large Accessible Buttons) */}
+        {/* 1. Triage Severity Selector (Soft Tinted Rounded Buttons) */}
         <div>
-          <label className="block font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-            Triage Severity Classification <span className="text-red-500">*</span>
+          <label className="block font-bold text-xs uppercase tracking-wider text-ink-secondary mb-2">
+            Triage Status <span className="text-coral">*</span>
           </label>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
@@ -164,16 +164,19 @@ export function QuickAddForm({
                   type="button"
                   id={`triage-btn-${tier.id}`}
                   onClick={() => setTriageLevel(tier.id)}
-                  className={`p-3.5 rounded-xl border text-left transition-all ${
+                  className={`p-3.5 rounded-2xl border text-left transition-all ${
                     emergencyMode ? 'min-h-[56px]' : 'min-h-[48px]'
                   } ${isSelected ? tier.activeClasses : tier.inactiveClasses}`}
                   aria-pressed={isSelected}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-extrabold text-xs tracking-wide">{tier.name}</span>
+                    <div className="flex items-center space-x-1.5">
+                      <span className={`w-2 h-2 rounded-full ${tier.dotClass}`} />
+                      <span className="font-bold text-xs tracking-wide">{tier.name}</span>
+                    </div>
                     <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
                   </div>
-                  <p className={`text-[11px] truncate ${isSelected ? 'text-white/90' : 'text-slate-500 dark:text-slate-400'}`}>
+                  <p className="text-[11px] text-ink-muted truncate pl-3.5">
                     {tier.subtitle}
                   </p>
                 </button>
@@ -189,27 +192,27 @@ export function QuickAddForm({
             <div className="flex items-center justify-between mb-1.5">
               <label
                 htmlFor="victim-name-field"
-                className="font-bold text-xs text-slate-700 dark:text-slate-300"
+                className="font-bold text-xs text-ink"
               >
-                Victim Identifier / Name <span className="text-red-500">*</span>
+                Victim Identifier / Name <span className="text-coral">*</span>
               </label>
               <button
                 type="button"
                 onClick={handleGenerateId}
-                className="text-[11px] font-bold text-aid-primary hover:text-aid-hover flex items-center gap-1 transition"
-                title="Generate anonymous casualty tag"
+                className="text-[11px] font-bold text-coral hover:text-coral-dark flex items-center gap-1 transition"
+                title="Generate casualty ID tag"
               >
                 <Sparkles className="w-3 h-3" />
-                <span>Auto Tag</span>
+                <span>Auto ID</span>
               </button>
             </div>
             <input
               id="victim-name-field"
               type="text"
-              placeholder="e.g. Victim #104 or Elena Vance"
+              placeholder="e.g. RSQ-1042 or Marcus Ramirez"
               value={victimName}
               onChange={(e) => setVictimName(e.target.value)}
-              className={`w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-aid-primary focus:ring-2 focus:ring-aid-primary/20 transition ${
+              className={`w-full bg-white border border-outline rounded-2xl px-4 text-ink placeholder-ink-light focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral-light transition ${
                 emergencyMode ? 'min-h-[56px] text-base' : 'min-h-[48px] text-sm'
               }`}
             />
@@ -219,53 +222,53 @@ export function QuickAddForm({
           <div className="md:col-span-7">
             <label
               htmlFor="location-field"
-              className="block font-bold text-xs text-slate-700 dark:text-slate-300 mb-1.5"
+              className="block font-bold text-xs text-ink mb-1.5"
             >
-              Current Location (Building / Floor / Sector) <span className="text-red-500">*</span>
+              Location (Building / Floor / Zone) <span className="text-coral">*</span>
             </label>
             <input
               id="location-field"
               type="text"
-              placeholder="e.g. Building B · Floor 2 · Stairwell A"
+              placeholder="e.g. Zone A — Building 3, Floor 2"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className={`w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-aid-primary focus:ring-2 focus:ring-aid-primary/20 transition ${
+              className={`w-full bg-white border border-outline rounded-2xl px-4 text-ink placeholder-ink-light focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral-light transition ${
                 emergencyMode ? 'min-h-[56px] text-base' : 'min-h-[48px] text-sm'
               }`}
             />
           </div>
         </div>
 
-        {/* 3. Clinical & Trauma Notes */}
+        {/* 3. Clinical & Medical Notes */}
         <div>
           <label
             htmlFor="notes-field"
-            className="block font-bold text-xs text-slate-700 dark:text-slate-300 mb-1.5"
+            className="block font-bold text-xs text-ink mb-1.5"
           >
-            Clinical Status & Trauma Notes
+            Medical Observations & Trauma Notes
           </label>
           <textarea
             id="notes-field"
             rows="2"
-            placeholder="e.g. Severe compound femur fracture, tourniquet placed at 14:20, conscious and breathing at 24/min..."
+            placeholder="e.g. Chest trauma, conscious, splint applied at 14:20..."
             value={statusNotes}
             onChange={(e) => setStatusNotes(e.target.value)}
-            className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-aid-primary focus:ring-2 focus:ring-aid-primary/20 transition resize-none"
+            className="w-full bg-white border border-outline rounded-2xl p-3.5 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral-light transition resize-none"
           />
         </div>
 
         {/* 4. Action & Success Indicator */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
           {successToast ? (
-            <div className="flex items-center space-x-2 text-xs font-bold text-emerald-800 bg-emerald-50 dark:bg-emerald-950/80 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700 px-3.5 py-2 rounded-xl animate-in fade-in">
-              <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <div className="flex items-center space-x-2 text-xs font-bold text-[#065F46] bg-[#ECFDF5] border border-[#A7F3D0] px-4 py-2.5 rounded-full animate-in fade-in">
+              <Check className="w-4 h-4 text-[#4F9D69]" />
               <span>
-                Registered <strong>{successToast.name}</strong> [{successToast.level}] — {successToast.online ? 'Synced to Central Command' : '⚡ Saved Locally in Outbox'}
+                Registered <strong>{successToast.name}</strong> [{successToast.level}] — {successToast.online ? 'Synced to Command' : 'Saved Locally in Outbox'}
               </span>
             </div>
           ) : (
-            <span className="text-xs text-slate-500 font-medium">
-              Accessible offline: mutations will safely queue if disconnected.
+            <span className="text-xs text-ink-muted font-medium">
+              Offline-ready: safely saved even if connection drops.
             </span>
           )}
 
@@ -276,9 +279,9 @@ export function QuickAddForm({
             icon={UserPlus}
             disabled={submitting}
             emergencyMode={emergencyMode}
-            className="w-full sm:w-auto shadow-aid-raised"
+            className="w-full sm:w-auto shadow-sm"
           >
-            {submitting ? 'Registering...' : '+ Register Casualty (Offline Ready)'}
+            {submitting ? 'Registering...' : '+ Register Casualty'}
           </UX4GButton>
         </div>
 

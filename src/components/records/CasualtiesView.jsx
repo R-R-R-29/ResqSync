@@ -2,9 +2,7 @@ import React, { useState, useMemo } from 'react';
 import {
   Users,
   Plus,
-  Filter,
   Layers,
-  ArrowUpDown,
 } from 'lucide-react';
 import { FilterBar } from '../triage/FilterBar';
 import { TriageCard } from '../triage/TriageCard';
@@ -64,14 +62,17 @@ export function CasualtiesView({
     <div className="space-y-5">
       
       {/* ── Header Strip ── */}
-      <div className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white p-5 sm:p-6 rounded-3xl border border-outline shadow-soft flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-            <Users className="w-5 h-5 text-aid-primary" aria-hidden="true" />
-            <span>Casualties Registry & Field Manifest</span>
+          <span className="text-xs font-bold text-coral uppercase tracking-wider block mb-1">
+            Operational Field Census
+          </span>
+          <h1 className="text-xl sm:text-2xl font-black text-ink tracking-tight flex items-center gap-2">
+            <Users className="w-5 h-5 text-coral" aria-hidden="true" />
+            <span>Casualties Registry</span>
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Operational triage census. Showing {filteredRecords.length} of {records.length} total casualties.
+          <p className="text-xs sm:text-sm text-ink-secondary mt-0.5">
+            Showing {filteredRecords.length} of {records.length} total casualties in Sector 4.
           </p>
         </div>
 
@@ -100,20 +101,22 @@ export function CasualtiesView({
 
       {/* ── Casualties Cards Grid ── */}
       {loading ? (
-        <div className="text-center py-20 text-slate-400 font-mono text-sm animate-pulse flex flex-col items-center justify-center gap-3">
-          <div className="w-8 h-8 border-2 border-aid-primary border-t-transparent rounded-full animate-spin"></div>
+        <div className="text-center py-20 text-ink-muted font-mono text-sm animate-pulse flex flex-col items-center justify-center gap-3">
+          <div className="w-8 h-8 border-2 border-coral border-t-transparent rounded-full animate-spin"></div>
           <span>Loading local IndexedDB registry...</span>
         </div>
       ) : filteredRecords.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 rounded-3xl">
-          <Layers className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-          <h3 className="text-base font-black text-slate-800 dark:text-slate-200">
-            No Casualties Found Matching Filter
+        <div className="text-center py-16 px-4 bg-white border border-outline rounded-3xl shadow-soft">
+          <div className="w-12 h-12 rounded-2xl bg-surface-secondary text-ink-muted flex items-center justify-center mx-auto mb-3">
+            <Layers className="w-6 h-6" />
+          </div>
+          <h3 className="text-base font-bold text-ink">
+            No Casualties Found
           </h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">
+          <p className="text-xs text-ink-secondary max-w-sm mx-auto mt-1 mb-4 leading-relaxed">
             {searchQuery || activeFilter !== 'all'
               ? 'Try resetting your search query or selecting "All Casualties".'
-              : 'No casualties registered in this field manifest yet.'}
+              : 'No casualty records registered in this manifest yet.'}
           </p>
           <div className="flex items-center justify-center gap-2">
             {(searchQuery || activeFilter !== 'all') && (
@@ -122,7 +125,7 @@ export function CasualtiesView({
                   setActiveFilter('all');
                   setSearchQuery('');
                 }}
-                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200"
+                className="px-4 py-2 rounded-full bg-surface-secondary text-xs font-bold text-ink hover:bg-[#EAE6E2] transition"
               >
                 Clear Filters
               </button>

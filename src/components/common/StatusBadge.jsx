@@ -10,8 +10,11 @@ import {
 } from 'lucide-react';
 
 /**
- * Multi-Sensory Triage Status Badges (UX4G Standard: Never Color Alone)
- * Always combines Color + Icon + Explicit Text.
+ * Multi-Sensory Triage Status Badges
+ * Aligned with the reference mobile design:
+ * - Soft tinted rounded-full pill backgrounds
+ * - Small colored indicators & icons
+ * - High-contrast text labels (never color alone)
  */
 export function StatusBadge({
   type = 'triage', // 'triage' | 'sync'
@@ -25,11 +28,11 @@ export function StatusBadge({
     if (isConflict) {
       return (
         <span
-          className={`inline-flex items-center gap-1.5 font-bold uppercase rounded-lg bg-red-100 text-red-800 border border-red-300 dark:bg-red-950/80 dark:text-red-300 dark:border-red-700 ${
-            size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs'
+          className={`inline-flex items-center gap-1.5 font-bold uppercase rounded-full bg-[#FDE3DF] text-[#C94336] border border-[#FBCBC4] ${
+            size === 'sm' ? 'px-2.5 py-0.5 text-[10px]' : 'px-3 py-1 text-xs'
           } ${className}`}
         >
-          <AlertTriangle className="w-3.5 h-3.5 text-red-600 dark:text-red-400" aria-hidden="true" />
+          <AlertTriangle className="w-3.5 h-3.5 text-[#C94336]" aria-hidden="true" />
           <span>Conflict Alert</span>
         </span>
       );
@@ -38,59 +41,59 @@ export function StatusBadge({
     if (!synced) {
       return (
         <span
-          className={`inline-flex items-center gap-1.5 font-bold rounded-lg bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/80 dark:text-amber-200 dark:border-amber-700 ${
-            size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs'
+          className={`inline-flex items-center gap-1.5 font-bold rounded-full bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] ${
+            size === 'sm' ? 'px-2.5 py-0.5 text-[10px]' : 'px-3 py-1 text-xs'
           } ${className}`}
         >
-          <Zap className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 animate-pulse" aria-hidden="true" />
-          <span>⚡ Saved on this device</span>
+          <Zap className="w-3.5 h-3.5 text-[#E5A33D] animate-pulse" aria-hidden="true" />
+          <span>Saved Locally</span>
         </span>
       );
     }
 
     return (
       <span
-        className={`inline-flex items-center gap-1.5 font-bold rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-200 dark:border-emerald-700 ${
-          size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs'
+        className={`inline-flex items-center gap-1.5 font-bold rounded-full bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] ${
+          size === 'sm' ? 'px-2.5 py-0.5 text-[10px]' : 'px-3 py-1 text-xs'
         } ${className}`}
       >
-        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-        <span>✓ Synced</span>
+        <span className="w-2 h-2 rounded-full bg-[#4F9D69]" aria-hidden="true" />
+        <span>Synced</span>
       </span>
     );
   }
 
-  // Triage badge mapping
+  // Triage badge mapping with soft tinted backgrounds & clean indicators
   const normalizedLevel = (level || 'immediate').toLowerCase();
 
   const configs = {
     immediate: {
-      label: '🔴 RED - Immediate',
-      shortLabel: '🔴 Immediate',
+      label: 'RED • Immediate',
+      shortLabel: 'RED • Immediate',
       icon: AlertCircle,
-      bg: 'bg-red-600 text-white border-red-700 shadow-sm',
-      softBg: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950/60 dark:text-red-300 dark:border-red-800',
+      dotClass: 'bg-[#D94343]',
+      pillClass: 'bg-[#FDE3DF] text-[#C94336] border border-[#FBCBC4]',
     },
     delayed: {
-      label: '🟡 YELLOW - Delayed',
-      shortLabel: '🟡 Delayed',
+      label: 'YELLOW • Delayed',
+      shortLabel: 'YELLOW • Delayed',
       icon: Clock,
-      bg: 'bg-amber-600 text-white border-amber-700 shadow-sm',
-      softBg: 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+      dotClass: 'bg-[#E5A33D]',
+      pillClass: 'bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]',
     },
     minor: {
-      label: '🟢 GREEN - Minor',
-      shortLabel: '🟢 Minor',
+      label: 'GREEN • Minor',
+      shortLabel: 'GREEN • Minor',
       icon: CheckCircle2,
-      bg: 'bg-emerald-600 text-white border-emerald-700 shadow-sm',
-      softBg: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+      dotClass: 'bg-[#4F9D69]',
+      pillClass: 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]',
     },
     expectant: {
-      label: '⬛ BLACK - Expectant',
-      shortLabel: '⬛ Expectant',
+      label: 'BLACK • Expectant',
+      shortLabel: 'BLACK • Expectant',
       icon: Activity,
-      bg: 'bg-slate-700 text-white border-slate-800 shadow-sm',
-      softBg: 'bg-slate-100 text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
+      dotClass: 'bg-[#171717]',
+      pillClass: 'bg-[#F3F1EF] text-[#171717] border border-[#E6E1DD]',
     },
   };
 
@@ -99,11 +102,12 @@ export function StatusBadge({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 font-black uppercase rounded-lg border tracking-wide transition-all ${
-        current.bg
-      } ${size === 'sm' ? 'px-2 py-0.5 text-[11px]' : size === 'lg' ? 'px-3.5 py-1.5 text-sm' : 'px-2.5 py-1 text-xs'} ${className}`}
+      className={`inline-flex items-center gap-1.5 font-bold uppercase rounded-full tracking-wide transition-all ${
+        current.pillClass
+      } ${size === 'sm' ? 'px-2.5 py-0.5 text-[11px]' : size === 'lg' ? 'px-4 py-1.5 text-sm' : 'px-3 py-1 text-xs'} ${className}`}
       title={current.label}
     >
+      <span className={`w-2 h-2 rounded-full ${current.dotClass}`} aria-hidden="true" />
       <Icon className={size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'} aria-hidden="true" />
       <span>{size === 'sm' ? current.shortLabel : current.label}</span>
     </span>

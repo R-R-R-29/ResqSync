@@ -2,13 +2,9 @@ import React, { useState } from 'react';
 import {
   AlertTriangle,
   GitMerge,
-  Clock,
   ShieldAlert,
   Check,
   X,
-  User,
-  MapPin,
-  Calendar,
   AlertOctagon,
   ArrowRight,
 } from 'lucide-react';
@@ -35,7 +31,7 @@ export function ConflictResolverModal({
   const triageA = (client.triageLevel || client.triage_category || 'delayed').toLowerCase();
   const triageB = (server.triageLevel || server.triage_category || 'immediate').toLowerCase();
 
-  // UX4G Severity Rule Check: If either side is RED and the other is GREEN, critical downgrade safety guard
+  // Severity Rule Check: If either side is RED and the other is GREEN, critical downgrade safety guard
   const isRedToGreenSafetyAlert =
     (triageA === 'immediate' && triageB === 'minor') ||
     (triageA === 'minor' && triageB === 'immediate');
@@ -46,7 +42,7 @@ export function ConflictResolverModal({
   const [mergedNotes, setMergedNotes] = useState(
     `[${teamAName}]: ${client.statusNotes || 'Initial assessment'}\n[${teamBName}]: ${server.statusNotes || 'Updated field status'}`
   );
-  const [mergedLocation, setMergedLocation] = useState(server.location || client.location || 'Building B');
+  const [mergedLocation, setMergedLocation] = useState(server.location || client.location || 'Zone A');
   const [isResolving, setIsResolving] = useState(false);
 
   // Resolution 1: Keep Team Alpha (Client)
@@ -122,102 +118,110 @@ export function ConflictResolverModal({
     }
   };
 
-  const victimId = server.victimName || client.victimName || `Victim #${server.id?.slice(0, 6) || '104'}`;
+  const victimId = server.victimName || client.victimName || `RSQ-${server.id?.slice(0, 4) || '1042'}`;
 
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="conflict-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-ink/60 backdrop-blur-sm animate-in fade-in"
     >
-      <div className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="w-full max-w-3xl bg-white border border-outline rounded-[28px] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         
         {/* ── 1. Human-Readable Conflict Header ── */}
-        <div className="p-4 sm:p-5 bg-aid-light dark:bg-red-950/40 border-b border-aid-border/60 dark:border-red-800 flex items-start justify-between gap-3">
-          <div className="flex items-start space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-aid-primary text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+        <div className="p-5 sm:p-6 bg-coral-light/60 border-b border-coral-light flex items-start justify-between gap-3">
+          <div className="flex items-start space-x-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-coral text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
               <AlertTriangle className="w-5 h-5 animate-pulse" aria-hidden="true" />
             </div>
             <div>
-              <h2 id="conflict-modal-title" className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight leading-snug">
-                Conflict Alert: {victimId} was updated by {teamAName} and {teamBName} independently while offline.
+              <div className="flex items-center space-x-2 mb-1">
+                <span className="px-2.5 py-0.5 text-[10px] font-black uppercase rounded-full bg-white text-coral border border-coral-light">
+                  CONFLICT DETECTED
+                </span>
+                <span className="text-xs font-mono font-bold text-ink-secondary">{victimId}</span>
+              </div>
+              <h2 id="conflict-modal-title" className="text-base sm:text-lg font-bold text-ink tracking-tight leading-snug">
+                Two responders updated this casualty differently while offline.
               </h2>
-              <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mt-1">
-                Both field units modified this casualty concurrently. Please review the timeline below and confirm the canonical operational state.
+              <p className="text-xs text-ink-secondary font-medium mt-1 leading-relaxed">
+                These updates cannot be safely merged automatically. Review the discrepancies below and select the authoritative medical state.
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition shrink-0"
+            className="p-2 text-ink-muted hover:text-ink rounded-full hover:bg-white/60 transition shrink-0"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* ── UX4G Safety Guard Alert (Red to Green Downgrade) ── */}
+        {/* ── Safety Guard Alert (Red to Green Downgrade) ── */}
         {isRedToGreenSafetyAlert && (
-          <div className="p-3.5 bg-red-600 text-white flex items-start space-x-2.5 text-xs font-bold shadow-inner">
-            <AlertOctagon className="w-5 h-5 shrink-0 animate-bounce" aria-hidden="true" />
+          <div className="p-4 bg-[#FDE3DF] text-[#C94336] border-b border-[#FBCBC4] flex items-start space-x-3 text-xs font-semibold">
+            <AlertOctagon className="w-5 h-5 shrink-0 text-[#D94343]" aria-hidden="true" />
             <div className="flex-1">
-              <span className="uppercase tracking-wider font-black block">CRITICAL SAFETY GUARD (UX4G Standard):</span>
-              <span>
-                One device assessed this casualty as 🔴 RED (Immediate Life Threat) while the other marked 🟢 GREEN (Minor). Automatic downgrade is locked.
+              <span className="uppercase tracking-wider font-bold block text-ink">
+                CRITICAL MEDICAL SAFETY GUARD:
               </span>
-              <label className="flex items-center space-x-2 mt-2 cursor-pointer bg-white/10 p-1.5 rounded-lg">
+              <span className="text-ink-secondary mt-0.5 block leading-relaxed">
+                One responder assessed this casualty as RED (Immediate), while another marked GREEN (Minor). Downgrading triage requires explicit confirmation.
+              </span>
+              <label className="flex items-center space-x-2.5 mt-2.5 cursor-pointer bg-white p-2 rounded-xl border border-[#FBCBC4]">
                 <input
                   type="checkbox"
                   checked={safetyConfirmed}
                   onChange={(e) => setSafetyConfirmed(e.target.checked)}
-                  className="w-4 h-4 text-aid-primary rounded focus:ring-red-400"
+                  className="w-4 h-4 text-coral rounded focus:ring-coral-light"
                 />
-                <span className="text-xs text-white">I am an authorized medical coordinator explicitly confirming this triage resolution.</span>
+                <span className="text-xs text-ink font-bold">I confirm this triage decision as an authorized responder.</span>
               </label>
             </div>
           </div>
         )}
 
         {/* ── Modal Content: Timeline & Side-by-Side Comparison ── */}
-        <div className="p-4 sm:p-6 overflow-y-auto space-y-5">
+        <div className="p-5 sm:p-6 overflow-y-auto space-y-4">
           
-          {/* 2. Timeline View */}
-          <div className="bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">
-              Chronological Modification Sequence
+          {/* 2. Timeline Sequence */}
+          <div className="bg-surface-secondary p-4 rounded-2xl border border-outline">
+            <span className="text-xs font-bold text-ink-secondary uppercase tracking-wider block mb-2.5">
+              Chronological Sequence
             </span>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-              <div className="flex items-center space-x-2">
-                <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-800 dark:text-slate-200">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-7 h-7 rounded-full bg-white border border-outline flex items-center justify-center font-bold text-ink text-xs shadow-soft">
                   1
                 </div>
                 <div>
-                  <span className="font-bold text-slate-800 dark:text-slate-200 block">{teamAName}</span>
-                  <span className="text-slate-500 text-[11px]">Edited locally at {new Date(client.updatedAt || Date.now()).toLocaleTimeString()}</span>
+                  <span className="font-bold text-ink block">{teamAName}</span>
+                  <span className="text-ink-muted text-[11px]">Edited locally at {new Date(client.updatedAt || Date.now()).toLocaleTimeString()}</span>
                 </div>
               </div>
 
-              <ArrowRight className="w-4 h-4 text-slate-400 hidden sm:block shrink-0" aria-hidden="true" />
+              <ArrowRight className="w-4 h-4 text-ink-muted hidden sm:block shrink-0" aria-hidden="true" />
 
-              <div className="flex items-center space-x-2">
-                <div className="w-7 h-7 rounded-full bg-aid-primary text-white flex items-center justify-center font-bold">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-7 h-7 rounded-full bg-coral text-white flex items-center justify-center font-bold text-xs shadow-soft">
                   2
                 </div>
                 <div>
-                  <span className="font-bold text-slate-800 dark:text-slate-200 block">{teamBName}</span>
-                  <span className="text-slate-500 text-[11px]">Overrode via satellite/cellular at {new Date(server.updatedAt || Date.now()).toLocaleTimeString()}</span>
+                  <span className="font-bold text-ink block">{teamBName}</span>
+                  <span className="text-ink-muted text-[11px]">Updated remotely at {new Date(server.updatedAt || Date.now()).toLocaleTimeString()}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 3. Side-by-Side Field Comparison (AidConnect Clean Cards) */}
+          {/* 3. Side-by-Side Field Comparison */}
           <div className="space-y-3">
             <DiffField
-              label="Triage Severity Classification"
+              label="Triage Status"
               valueA={triageA}
               valueB={triageB}
               labelA={teamAName}
@@ -228,33 +232,33 @@ export function ConflictResolverModal({
 
             <DiffField
               label="Casualty Location"
-              valueA={client.location || 'Building B · Floor 2'}
-              valueB={server.location || 'Sector 4 · Ambulance 07'}
+              valueA={client.location || 'Zone A · Building 3'}
+              valueB={server.location || 'Sector 4 · Field Hospital 01'}
               labelA={teamAName}
               labelB={teamBName}
               isDifferent={(client.location || '') !== (server.location || '')}
             />
 
             <DiffField
-              label="Status & Trauma Observations"
-              valueA={client.statusNotes || 'Airway cleared, splint applied.'}
-              valueB={server.statusNotes || 'Patient evacuated to mobile medical tent.'}
+              label="Medical & Trauma Notes"
+              valueA={client.statusNotes || 'Initial assessment: conscious, stable splint.'}
+              valueB={server.statusNotes || 'Vitals deteriorating, breathing rate 36/min.'}
               labelA={teamAName}
               labelB={teamBName}
               isDifferent={(client.statusNotes || '') !== (server.statusNotes || '')}
             />
           </div>
 
-          {/* Optional 3-Way Merge Field Editor */}
+          {/* Optional Merge Field Editor */}
           {activeMode === 'merge_editor' && (
-            <div className="p-4 rounded-2xl bg-amber-50/80 dark:bg-slate-800 border border-amber-300 dark:border-slate-700 space-y-3 animate-in fade-in">
-              <span className="text-xs font-bold text-amber-900 dark:text-amber-200 uppercase tracking-wider block">
-                Custom Reconciliation: Pick Authoritative Fields
+            <div className="p-4 rounded-2xl bg-[#FFFBEB] border border-[#FDE68A] space-y-3 animate-in fade-in">
+              <span className="text-xs font-bold text-[#92400E] uppercase tracking-wider block">
+                Custom Reconciliation: Select Authoritative Fields
               </span>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                  Canonical Triage Severity:
+                <label className="text-xs font-bold text-ink block mb-1">
+                  Authoritative Triage Status:
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {['immediate', 'delayed', 'minor', 'expectant'].map((lvl) => (
@@ -262,10 +266,10 @@ export function ConflictResolverModal({
                       key={lvl}
                       type="button"
                       onClick={() => setMergedTriage(lvl)}
-                      className={`p-2 rounded-xl text-xs font-bold border transition ${
+                      className={`p-2.5 rounded-xl text-xs font-bold border transition ${
                         mergedTriage === lvl
-                          ? 'bg-aid-primary text-white border-red-700 shadow-sm ring-2 ring-red-300'
-                          : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                          ? 'bg-coral text-white border-coral-dark shadow-sm'
+                          : 'bg-white text-ink border-outline hover:border-coral/50'
                       }`}
                     >
                       {lvl.toUpperCase()}
@@ -275,14 +279,14 @@ export function ConflictResolverModal({
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                <label className="text-xs font-bold text-ink block mb-1">
                   Combined Field Notes:
                 </label>
                 <textarea
                   rows="3"
                   value={mergedNotes}
                   onChange={(e) => setMergedNotes(e.target.value)}
-                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white"
+                  className="w-full bg-white border border-outline rounded-xl p-3 text-xs text-ink"
                 />
               </div>
 
@@ -299,8 +303,8 @@ export function ConflictResolverModal({
 
         </div>
 
-        {/* ── 4. Human Action Controls (Large Accessible Buttons) ── */}
-        <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5">
+        {/* ── 4. Human Decision Cards / Buttons (Large Pill CTAs) ── */}
+        <div className="p-4 sm:p-5 bg-surface-secondary border-t border-outline flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5">
           
           <UX4GButton
             variant="outline"
@@ -308,7 +312,7 @@ export function ConflictResolverModal({
             disabled={isResolving || (isRedToGreenSafetyAlert && !safetyConfirmed)}
             emergencyMode={emergencyMode}
           >
-            Keep {teamAName} Edit
+            Keep {teamAName}
           </UX4GButton>
 
           <UX4GButton
@@ -317,7 +321,7 @@ export function ConflictResolverModal({
             disabled={isResolving}
             emergencyMode={emergencyMode}
           >
-            Keep {teamBName} Edit
+            Keep {teamBName}
           </UX4GButton>
 
           <UX4GButton
@@ -333,7 +337,7 @@ export function ConflictResolverModal({
             icon={GitMerge}
             emergencyMode={emergencyMode}
           >
-            {activeMode === 'merge_editor' ? 'Save Merged Notes' : 'Merge & Combine Field Notes'}
+            {activeMode === 'merge_editor' ? 'Save Merged Notes' : 'Review & Merge'}
           </UX4GButton>
 
         </div>

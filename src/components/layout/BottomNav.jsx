@@ -9,8 +9,11 @@ import {
 
 /**
  * BottomNav
- * Mobile Navigation (< 768px) per AidConnect Emergency UI Kit standard.
- * 5 primary destinations with min 48px touch targets.
+ * Mobile Navigation (< 768px) per reference mobile app design:
+ * - Crisp white surface with subtle top border
+ * - Active coral state with pill indicator
+ * - Muted inactive state
+ * - Clean badges for unsynced and conflict records
  */
 export function BottomNav({
   activeTab = 'dashboard',
@@ -20,31 +23,31 @@ export function BottomNav({
   emergencyMode = false,
 }) {
   const NAV_ITEMS = [
-    { id: 'dashboard', label: 'Dashboard', icon: Home },
+    { id: 'dashboard', label: 'Home', icon: Home },
     {
       id: 'records',
       label: 'Casualties',
       icon: Users,
       badge: unsyncedCount > 0 ? unsyncedCount : null,
-      badgeClass: 'bg-amber-500 text-slate-950',
+      badgeClass: 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]',
     },
-    { id: 'map', label: 'Map / Field', icon: MapPin },
+    { id: 'map', label: 'Map', icon: MapPin },
     {
       id: 'conflicts',
       label: 'Conflicts',
       icon: AlertTriangle,
       badge: conflictCount > 0 ? conflictCount : null,
-      badgeClass: 'bg-red-600 text-white animate-pulse',
+      badgeClass: 'bg-[#FDE3DF] text-[#C94336] border-[#FBCBC4] animate-pulse',
     },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'settings', label: 'More', icon: Settings },
   ];
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] backdrop-blur-md"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-outline shadow-[0_-4px_20px_rgba(0,0,0,0.04)]"
       aria-label="Mobile Navigation"
     >
-      <div className="grid grid-cols-5 h-[64px] max-w-lg mx-auto">
+      <div className="grid grid-cols-5 h-[64px] max-w-lg mx-auto px-1">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -55,22 +58,22 @@ export function BottomNav({
               onClick={() => onSelectTab(item.id)}
               className={`relative flex flex-col items-center justify-center min-h-[48px] py-1 transition-all ${
                 isActive
-                  ? 'text-aid-primary font-black'
-                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-medium'
+                  ? 'text-coral font-bold'
+                  : 'text-ink-muted hover:text-ink font-medium'
               }`}
               aria-current={isActive ? 'page' : undefined}
             >
-              {/* Active Indicator Bar */}
+              {/* Active Indicator Pill */}
               {isActive && (
-                <span className="absolute top-0 w-8 h-1 bg-aid-primary rounded-full" />
+                <span className="absolute top-1.5 w-6 h-1 bg-coral rounded-full" />
               )}
 
               {/* Icon with optional badge */}
-              <div className="relative">
+              <div className="relative mt-1">
                 <Icon className={emergencyMode ? 'w-6 h-6' : 'w-5 h-5'} aria-hidden="true" />
                 {item.badge && (
                   <span
-                    className={`absolute -top-1 -right-2.5 px-1.5 py-0.2 rounded-full text-[10px] font-black leading-tight border border-white dark:border-slate-900 shadow-sm ${item.badgeClass}`}
+                    className={`absolute -top-1 -right-2 px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold leading-tight border shadow-sm ${item.badgeClass}`}
                   >
                     {item.badge}
                   </span>
@@ -78,7 +81,7 @@ export function BottomNav({
               </div>
 
               {/* Label */}
-              <span className={`text-[10px] sm:text-[11px] mt-1 truncate max-w-[64px] ${isActive ? 'font-bold' : ''}`}>
+              <span className={`text-[10px] mt-1 truncate max-w-[64px] ${isActive ? 'font-bold text-coral' : 'text-ink-muted'}`}>
                 {item.label}
               </span>
             </button>

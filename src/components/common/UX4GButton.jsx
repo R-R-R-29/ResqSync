@@ -3,10 +3,12 @@ import React from 'react';
 /**
  * UX4GButton
  * 
- * Complies with UX4G touch target standards:
- * - Default: min 48px x 48px
- * - Emergency mode: min 56px x 56px
- * - Visible focus ring (WCAG AAA)
+ * Styled according to reference mobile-app design:
+ * - Rounded / pill-shaped buttons
+ * - Coral primary CTA (#E85B4A) with crisp white text
+ * - Secondary white with coral border and text
+ * - Min 48px touch target (56px in emergency mode)
+ * - Accessible focus indicators
  */
 export function UX4GButton({
   children,
@@ -22,28 +24,28 @@ export function UX4GButton({
   ...props
 }) {
   const baseClasses =
-    'relative inline-flex items-center justify-center font-bold tracking-wide rounded-xl transition-all duration-150 active:scale-[0.98] select-none focus-visible:ring-2 focus-visible:ring-aid-primary focus-visible:ring-offset-2';
+    'relative inline-flex items-center justify-center font-bold tracking-wide rounded-full transition-all duration-150 active:scale-[0.98] select-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2';
 
   const sizeClasses = emergencyMode
-    ? 'min-h-[56px] px-6 text-base gap-3'
+    ? 'min-h-[56px] px-7 text-base gap-3'
     : size === 'sm'
-    ? 'min-h-[40px] px-3.5 py-1.5 text-xs gap-1.5'
+    ? 'min-h-[42px] px-4 py-1.5 text-xs gap-1.5'
     : size === 'lg'
-    ? 'min-h-[52px] px-6 py-3 text-base gap-2.5'
-    : 'min-h-[48px] px-5 py-2.5 text-sm gap-2';
+    ? 'min-h-[52px] px-7 py-3 text-base gap-2.5'
+    : 'min-h-[48px] px-6 py-2.5 text-sm gap-2';
 
   const variantClasses = {
-    // AidConnect Terracotta Primary
+    // Reference Coral Primary CTA
     primary:
-      'bg-aid-primary text-white hover:bg-aid-hover shadow-sm hover:shadow active:bg-red-800 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed',
+      'bg-coral text-white hover:bg-coral-dark shadow-sm hover:shadow active:bg-coral-dark disabled:bg-[#E6E1DD] disabled:text-[#8A8580] disabled:cursor-not-allowed',
     secondary:
-      'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700 disabled:opacity-50',
+      'bg-white text-coral hover:bg-coral-light border-2 border-coral shadow-sm active:bg-coral-light disabled:opacity-50',
     outline:
-      'bg-white text-slate-800 border-2 border-slate-300 hover:border-aid-primary hover:text-aid-primary dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700 dark:hover:border-aid-primary disabled:opacity-50',
+      'bg-white text-ink border border-outline hover:border-coral hover:text-coral shadow-sm disabled:opacity-50',
     danger:
-      'bg-red-600 text-white hover:bg-red-700 shadow-sm active:bg-red-800 disabled:opacity-50',
+      'bg-[#D94343] text-white hover:bg-[#C94336] shadow-sm active:bg-[#B91C1C] disabled:opacity-50',
     ghost:
-      'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100',
+      'bg-transparent text-ink-secondary hover:bg-surface-secondary hover:text-ink',
   };
 
   return (
