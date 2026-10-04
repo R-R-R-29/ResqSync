@@ -110,13 +110,13 @@ export function DemoToolbar({
           {/* Header Strip with Toggle Chevron */}
           <div className="py-2 flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+              <div className="w-6 h-6 rounded-lg bg-aid-primary/20 border border-aid-primary/40 flex items-center justify-center text-aid-primary">
                 <Wrench className="w-3.5 h-3.5" />
               </div>
               <span className="text-xs font-black tracking-wider uppercase text-white flex items-center gap-1.5">
-                Judge Sandbox Controls
-                <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-slate-800 text-amber-400 border border-slate-700">
-                  HACKATHON DEMO TOOLBAR
+                Hackathon Demo Controls
+                <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-slate-800 text-aid-border border border-slate-700">
+                  JUDGE SANDBOX
                 </span>
               </span>
             </div>
@@ -147,8 +147,8 @@ export function DemoToolbar({
               <button
                 id="toggle-demo-toolbar-btn"
                 onClick={() => setIsExpanded((prev) => !prev)}
-                className="text-xs text-slate-400 hover:text-white flex items-center space-x-1 px-2 py-1 rounded hover:bg-slate-800 transition"
-                title={isExpanded ? 'Collapse Sandbox Toolbar' : 'Expand Sandbox Toolbar'}
+                className="text-xs text-slate-400 hover:text-white flex items-center space-x-1 px-2.5 py-1 rounded hover:bg-slate-800 transition min-h-[36px]"
+                title={isExpanded ? 'Collapse Demo Controls' : 'Expand Demo Controls'}
               >
                 <span className="text-[11px] font-semibold">{isExpanded ? 'Hide' : 'Show Tools'}</span>
                 {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
@@ -160,11 +160,11 @@ export function DemoToolbar({
           {isExpanded && (
             <div className="pt-1 pb-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5 animate-in fade-in duration-150">
               
-              {/* Action 1: 🔘 Toggle Simulated Offline */}
+              {/* Action 1: [ Toggle Simulated Offline Mode ] */}
               <button
                 id="btn-toggle-simulated-offline"
                 onClick={handleToggleOffline}
-                className={`py-2 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center space-x-2 active:scale-95 shadow-md ${
+                className={`py-2 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center space-x-2 active:scale-95 shadow-md min-h-[48px] ${
                   isSimulatedOffline
                     ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 border-amber-400 ring-2 ring-amber-400/40 shadow-warning-glow'
                     : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700 hover:border-amber-500/60'
@@ -174,41 +174,41 @@ export function DemoToolbar({
                 {isSimulatedOffline ? (
                   <>
                     <Wifi className="w-4 h-4 text-slate-950" />
-                    <span>🔘 Resume Live Sync (Go Online)</span>
+                    <span>[ Resume Live Sync (Go Online) ]</span>
                   </>
                 ) : (
                   <>
                     <WifiOff className="w-4 h-4 text-amber-400" />
-                    <span>🔘 Toggle Simulated Offline</span>
+                    <span>[ Toggle Simulated Offline Mode ]</span>
                   </>
                 )}
               </button>
 
-              {/* Action 2: ⚡ Simulate Multi-Device Conflict */}
+              {/* Action 2: [ Inject Dual-Device Conflict ] */}
               <button
                 id="btn-simulate-conflict"
                 onClick={handleSimulateConflict}
                 disabled={loadingAction === 'conflict'}
-                className="py-2 px-3 rounded-xl border border-red-500/60 bg-red-950/70 hover:bg-red-900/80 text-red-200 text-xs font-bold transition flex items-center justify-center space-x-2 active:scale-95 shadow-emergency-glow disabled:opacity-50"
+                className="py-2 px-3 rounded-xl border border-red-500/60 bg-red-950/70 hover:bg-red-900/80 text-red-200 text-xs font-bold transition flex items-center justify-center space-x-2 active:scale-95 shadow-emergency-glow disabled:opacity-50 min-h-[48px]"
                 title="Inject a conflicting server update from Device-Tablet-02 to trigger 3-Way Conflict Modal"
               >
                 <Zap className={`w-4 h-4 text-red-400 ${loadingAction === 'conflict' ? 'animate-bounce' : ''}`} />
                 <span>
-                  {loadingAction === 'conflict' ? 'Injecting...' : '⚡ Simulate Multi-Device Conflict'}
+                  {loadingAction === 'conflict' ? 'Injecting...' : '[ Inject Dual-Device Conflict ]'}
                 </span>
               </button>
 
-              {/* Action 3: 🧹 Clear Demo Data */}
+              {/* Action 3: [ Reset Demo Data ] */}
               <button
                 id="btn-clear-demo-data"
                 onClick={handleClearDemoData}
                 disabled={loadingAction === 'clear'}
-                className="py-2 px-3 rounded-xl border border-slate-700 bg-slate-900 hover:bg-rose-950/60 hover:border-rose-700/80 text-slate-300 hover:text-rose-200 text-xs font-bold transition flex items-center justify-center space-x-2 active:scale-95 disabled:opacity-50"
+                className="py-2 px-3 rounded-xl border border-slate-700 bg-slate-900 hover:bg-rose-950/60 hover:border-rose-700/80 text-slate-300 hover:text-rose-200 text-xs font-bold transition flex items-center justify-center space-x-2 active:scale-95 disabled:opacity-50 min-h-[48px]"
                 title="Reset IndexedDB and SQLite database to empty state"
               >
                 <Trash2 className="w-4 h-4 text-rose-400" />
                 <span>
-                  {loadingAction === 'clear' ? 'Wiping DBs...' : '🧹 Clear Demo Data'}
+                  {loadingAction === 'clear' ? 'Wiping DBs...' : '[ Reset Demo Data ]'}
                 </span>
               </button>
 

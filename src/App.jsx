@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
-import { Navbar } from './components/Navbar';
-import { Dashboard } from './components/Dashboard';
-import { TriageFormModal } from './components/TriageFormModal';
-import { ConflictBanner } from './components/ConflictBanner';
-import { ConflictModal } from './components/ConflictModal';
+import React, { useState, useEffect } from 'react';
+import { Header } from './components/layout/Header';
+import { Sidebar } from './components/layout/Sidebar';
+import { BottomNav } from './components/layout/BottomNav';
+import { OfflineBanner } from './components/common/OfflineBanner';
+import { DashboardView } from './components/dashboard/DashboardView';
+import { CasualtiesView } from './components/records/CasualtiesView';
+import { FieldSectorMap } from './components/map/FieldSectorMap';
+import { ConflictsPageView } from './components/conflict/ConflictsPageView';
+import { ConflictResolverModal } from './components/conflict/ConflictResolverModal';
+import { SettingsView } from './components/settings/SettingsView';
 import { DemoToolbar } from './components/DemoToolbar';
+import { TriageFormModal } from './components/TriageFormModal';
 import { useTriage } from './hooks/useTriage';
 import { useNetworkStatus } from './hooks/useNetworkStatus';
-import { WifiOff, Radio, ShieldOff } from 'lucide-react';
 
 export function App() {
   const {
     records,
     loading,
+    counts,
     addTriage,
     updateTriage,
     deleteTriage,
@@ -24,214 +30,238 @@ export function App() {
     isOnline,
     isSimulatedOffline,
     setSimulatedOffline,
+    syncState,
     pendingCount,
     conflictCount,
     conflicts,
     dismissConflict,
   } = useNetworkStatus();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeConflict, setActiveConflict] = useState(null);
+  // Navigation: 'dashboard' | 'records' | 'map' | 'conflicts' | 'settings'
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [emergencyMode, setEmergencyMode] = useState(false);
+  const [activeLanguage, setActiveLanguage] = useState('en');
 
-  // Trigger simulated conflict from Device-Tablet-02
+  // Modals
+  const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
+  const [activeConflictModal, setActiveConflictModal] = useState(null);
+
+  // Sync Emergency Mode class with document body for global sizing (UX4G standard)
+  useEffect(() => {
+    if (emergencyMode) {
+      document.body.classList.add('emergency-mode-active');
+    } else {
+      document.body.classList.remove('emergency-mode-active');
+    }
+  }, [emergencyMode]);
+
+  // Seed initial demo records on very first load if store is empty
+  useEffect(() => {
+    if (!loading && records.length === 0) {
+      seedDemoData();
+    }
+  }, [loading, records.length, seedDemoData]);
+
+  // Handle Dual-Device Conflict Simulation
   const handleSimulateConflict = async () => {
     try {
-      // 1. Try server endpoint
       const res = await fetch('/api/demo/conflict', { method: 'POST' });
       if (res.ok) {
         const data = await res.json();
         if (data.conflict) {
-          setActiveConflict(data.conflict);
+          setActiveConflictModal(data.conflict);
           return;
         }
       }
     } catch {
-      /* Fallback to local conflict synthesis */
+      /* fallback to local synthesis */
     }
 
-    // Fallback: Pick existing or sample record and synthesize immediate conflict
-    const sampleTarget = records[0] || {
-      id: 'REC-MARCUS-01',
-      victimName: 'Marcus Ramirez',
+    const target = records[0] || {
+      id: 'REC-104',
+      victimName: 'Victim #104 (Marcus Ramirez)',
       triageLevel: 'delayed',
-      location: 'Sector 4 - Stairwell B, East Tower',
-      statusNotes: 'Local Responder: Conscious, stable breathing, splint applied to left femur.',
+      location: 'Building B · Floor 2 · Stairwell A',
+      statusNotes: 'Local Responder (Team Alpha): Conscious, bleeding stabilized, compound fracture splinted.',
       version: 1,
     };
 
-    const conflictObj = {
+    const simulated = {
       serverRecord: {
-        id: sampleTarget.id,
-        victimName: sampleTarget.victimName || 'Marcus Ramirez',
+        id: target.id,
+        victimName: target.victimName || 'Victim #104',
         triageLevel: 'immediate', // Remote override
-        location: 'Sector 4 - Intensive Care Transit Unit',
-        statusNotes: 'OVERRIDE BY Device-Tablet-02: Vital signs deteriorating rapidly. SpO2 84%, tension pneumothorax detected.',
-        responderId: 'Dr. Morales (Tablet-02)',
+        location: 'Sector 4 · Mobile Field Hospital 01',
+        statusNotes: 'OVERRIDE by Team Beta (Tablet-02): Patient vitals deteriorating rapidly. Respiratory rate 36/min, SpO2 83%.',
+        responderId: 'Team Beta (Tablet-02)',
         deviceId: 'Device-Tablet-02',
-        version: (sampleTarget.version ?? 1) + 2,
+        version: (target.version ?? 1) + 2,
         updatedAt: new Date().toISOString(),
       },
       clientPayload: {
-        ...sampleTarget,
+        ...target,
         triageLevel: 'delayed',
-        statusNotes: sampleTarget.statusNotes || 'Local Responder: Conscious, stable breathing, splint applied to left femur.',
-        version: sampleTarget.version ?? 1,
+        statusNotes: target.statusNotes || 'Local Responder (Team Alpha): Stable breathing, awaits transport.',
+        responderId: 'Team Alpha (Local)',
         deviceId: 'Device-Phone-01',
+        version: target.version ?? 1,
       },
     };
 
-    setActiveConflict(conflictObj);
+    setActiveConflictModal(simulated);
   };
 
-  const handleConflictResolved = (resolvedRecord) => {
-    setActiveConflict(null);
+  const handleConflictResolved = () => {
+    setActiveConflictModal(null);
     refresh();
   };
 
   return (
-    <div className="min-h-screen bg-resq-dark text-slate-100 flex flex-col font-sans selection:bg-resq-immediate selection:text-white pb-20">
+    <div className="min-h-screen bg-aid-surface dark:bg-aid-darkSurface text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors pb-24 md:pb-20">
       
-      {/* ── 1. GLOBAL EMERGENCY RESPONDER NAVBAR ── */}
-      <Navbar
-        onOpenNewTriage={() => setIsModalOpen(true)}
-        onSeedData={seedDemoData}
+      {/* ── 1. Top High-Contrast Offline / Connectivity Status Bar (UX4G Standard) ── */}
+      <OfflineBanner
+        isOnline={isOnline}
+        isSimulatedOffline={isSimulatedOffline}
+        setSimulatedOffline={setSimulatedOffline}
+        syncState={syncState}
+        pendingCount={pendingCount}
+        conflictCount={conflictCount || (conflicts.length > 0 ? conflicts.length : 0)}
+        onResolveConflict={() => {
+          if (conflicts.length > 0) {
+            setActiveConflictModal(conflicts[0]);
+          } else {
+            setActiveTab('conflicts');
+          }
+        }}
       />
 
-      {/* ── 2. REAL-TIME DISCONNECTION / FIELD ALERT STRIPS ── */}
-      {!isOnline && (
-        <div className="bg-amber-950/90 border-b border-amber-800 text-amber-200 px-4 py-2 text-xs font-bold flex items-center justify-between shadow-warning-glow">
-          <div className="flex items-center space-x-2">
-            <WifiOff className="w-4 h-4 text-amber-400 animate-pulse" />
-            <span>Field Disconnected: Zero-network mode active. All patient intake and triage edits are saved to IndexedDB outbox.</span>
-          </div>
-          {pendingCount > 0 && (
-            <span className="bg-amber-900/80 border border-amber-700 px-2.5 py-0.5 rounded text-[11px] font-mono">
-              {pendingCount} Queued in Outbox
-            </span>
-          )}
-        </div>
-      )}
+      {/* ── 2. AidConnect Brand Header (Emergency Mode + Language Switcher) ── */}
+      <Header
+        emergencyMode={emergencyMode}
+        setEmergencyMode={setEmergencyMode}
+        activeLanguage={activeLanguage}
+        setLanguage={setActiveLanguage}
+        onOpenIntake={() => setIsIntakeModalOpen(true)}
+        pendingCount={pendingCount}
+        conflictCount={conflictCount}
+      />
 
-      {isSimulatedOffline && (
-        <div className="bg-slate-900/90 border-b border-slate-700 text-slate-300 px-4 py-1.5 text-xs font-semibold flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <ShieldOff className="w-3.5 h-3.5 text-amber-400" />
-            <span>Drill Simulation: Network paused by field commander. Test offline-first mutations.</span>
-          </div>
-          <button
-            onClick={() => setSimulatedOffline(false)}
-            className="text-[11px] underline text-amber-400 hover:text-amber-300 font-bold transition"
-          >
-            Resume Live Sync
-          </button>
-        </div>
-      )}
-
-      {/* ── 3. MAIN INCIDENT COMMAND DASHBOARD ── */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      {/* ── 3. Main Operational View Layout (Desktop Sidebar + Content Area) ── */}
+      <div className="flex-1 flex w-full max-w-7xl mx-auto">
         
-        {/* Conflict Resolution Banners (triggers 3-way modal on click) */}
-        {conflicts.length > 0 && (
-          <div className="space-y-2">
-            <div className="p-3 bg-red-950/80 border border-red-600 rounded-xl text-xs text-red-200 flex items-center justify-between shadow-emergency-glow">
-              <span className="font-bold">
-                ⚠️ {conflicts.length} Unresolved Multi-Device Conflict(s) Detected!
-              </span>
-              <button
-                onClick={() => setActiveConflict(conflicts[0])}
-                className="px-3 py-1 bg-red-600 hover:bg-red-500 text-white font-extrabold rounded-lg transition"
-              >
-                Resolve in 3-Way Modal
-              </button>
-            </div>
-            <ConflictBanner
-              conflicts={conflicts}
-              onDismiss={(idx) => {
-                setActiveConflict(conflicts[idx]);
-                dismissConflict(idx);
-              }}
-            />
-          </div>
-        )}
-
-        {/* Tactical Mission Header */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-lg backdrop-blur">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center space-x-2">
-                <Radio className="w-4 h-4 text-resq-immediate animate-pulse" />
-                <span className="text-xs uppercase font-mono tracking-widest text-slate-400">
-                  INCIDENT COMMAND: SECTOR 4 QUAKE RESPONSE
-                </span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
-                Triage Coordination & Field Logistics
-              </h1>
-              <p className="text-sm text-slate-400 mt-1 max-w-2xl">
-                High-contrast triage assessment with zero-latency local caching. Changes automatically synchronize across command hubs when connected.
-              </p>
-            </div>
-
-            <div className="flex items-center space-x-2.5">
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-resq-immediate hover:bg-red-600 text-white font-extrabold text-sm shadow-emergency-glow transition active:scale-95"
-              >
-                + Modal Intake
-              </button>
-              <button
-                onClick={seedDemoData}
-                className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition"
-                title="Inject sample drill records"
-              >
-                Seed Victims
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Unified Incident Dashboard: QuickAddForm + Filter Tabs + Live Search + TriageCard Grid */}
-        <Dashboard
-          records={records}
-          loading={loading}
-          onAddTriage={addTriage}
-          onUpdateTriage={updateTriage}
-          onDeleteTriage={deleteTriage}
+        {/* Desktop Collapsible Tactical Sidebar (>= 768px) */}
+        <Sidebar
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
           isOnline={isOnline}
           pendingCount={pendingCount}
+          conflictCount={conflictCount || conflicts.length}
+          recordsCount={records.length}
+          isCollapsed={isSidebarCollapsed}
+          setIsCollapsed={setIsSidebarCollapsed}
+          emergencyMode={emergencyMode}
         />
 
-      </main>
+        {/* Dynamic Page Views */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 overflow-y-auto">
+          {activeTab === 'dashboard' && (
+            <DashboardView
+              records={records}
+              counts={counts}
+              pendingCount={pendingCount}
+              conflictCount={conflictCount || conflicts.length}
+              isOnline={isOnline}
+              emergencyMode={emergencyMode}
+              setEmergencyMode={setEmergencyMode}
+              onAddTriage={addTriage}
+              onUpdateTriage={updateTriage}
+              onDeleteTriage={deleteTriage}
+              onNavigateToRecords={() => setActiveTab('records')}
+              onNavigateToConflicts={() => setActiveTab('conflicts')}
+            />
+          )}
 
-      {/* ── 4. BACKUP RAPID INTAKE MODAL ── */}
+          {activeTab === 'records' && (
+            <CasualtiesView
+              records={records}
+              counts={counts}
+              loading={loading}
+              onAddTriage={addTriage}
+              onUpdateTriage={updateTriage}
+              onDeleteTriage={deleteTriage}
+              emergencyMode={emergencyMode}
+              onOpenIntakeModal={() => setIsIntakeModalOpen(true)}
+            />
+          )}
+
+          {activeTab === 'map' && (
+            <FieldSectorMap
+              records={records}
+              emergencyMode={emergencyMode}
+            />
+          )}
+
+          {activeTab === 'conflicts' && (
+            <ConflictsPageView
+              conflicts={conflicts.length > 0 ? conflicts : activeConflictModal ? [activeConflictModal] : []}
+              onSelectConflict={(c) => setActiveConflictModal(c)}
+              onInjectConflict={handleSimulateConflict}
+              emergencyMode={emergencyMode}
+            />
+          )}
+
+          {activeTab === 'settings' && (
+            <SettingsView
+              activeLanguage={activeLanguage}
+              setLanguage={setActiveLanguage}
+              emergencyMode={emergencyMode}
+              setEmergencyMode={setEmergencyMode}
+              pendingCount={pendingCount}
+              recordsCount={records.length}
+              isOnline={isOnline}
+              onResetData={refresh}
+            />
+          )}
+        </main>
+      </div>
+
+      {/* ── 4. Mobile Fixed Bottom Navigation Bar (< 768px, AidConnect Standard) ── */}
+      <BottomNav
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        conflictCount={conflictCount || conflicts.length}
+        unsyncedCount={pendingCount}
+        emergencyMode={emergencyMode}
+      />
+
+      {/* ── 5. Human-Readable 3-Way Conflict Resolver Modal (No Technical JSON Diffs) ── */}
+      <ConflictResolverModal
+        isOpen={!!activeConflictModal}
+        conflict={activeConflictModal}
+        onClose={() => setActiveConflictModal(null)}
+        onResolved={handleConflictResolved}
+        emergencyMode={emergencyMode}
+      />
+
+      {/* ── 6. Rapid Casualty Intake Modal (Supplemental) ── */}
       <TriageFormModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isIntakeModalOpen}
+        onClose={() => setIsIntakeModalOpen(false)}
         onSubmit={addTriage}
       />
 
-      {/* ── 5. 3-WAY MULTI-DEVICE CONFLICT MODAL ── */}
-      <ConflictModal
-        isOpen={!!activeConflict}
-        conflict={activeConflict}
-        onClose={() => setActiveConflict(null)}
-        onResolved={handleConflictResolved}
-      />
-
-      {/* ── 6. HACKATHON DEMO SANDBOX TOOLBAR (STICKY BOTTOM) ── */}
+      {/* ── 7. Hackathon Demo Controls (Sticky Bottom Drawer for Judges) ── */}
       <DemoToolbar
         isSimulatedOffline={isSimulatedOffline}
         setSimulatedOffline={setSimulatedOffline}
         onTriggerConflict={handleSimulateConflict}
         onResetData={refresh}
         pendingCount={pendingCount}
-        conflictCount={conflictCount || (activeConflict ? 1 : 0)}
+        conflictCount={conflictCount || (conflicts.length > 0 ? conflicts.length : 0)}
       />
 
-      {/* ── 7. DISASTER RESPONSE FOOTER ── */}
-      <footer className="border-t border-slate-800/90 bg-slate-950/90 py-4 text-xs text-slate-500 font-mono text-center mb-8">
-        <p>ResqSync • Tactical Disaster Triage System • Offline-First PWA • IndexedDB + SQLite</p>
-      </footer>
     </div>
   );
 }

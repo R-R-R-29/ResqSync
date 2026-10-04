@@ -7,48 +7,78 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Noto Sans"', '"Noto Sans Devanagari"', 'system-ui', '-apple-system', 'sans-serif'],
+      },
       colors: {
-        // High-contrast emergency response theme
-        resq: {
-          dark: '#0f172a',      // Primary dark slate background
-          card: '#1e293b',      // Card surface slate
-          border: '#334155',    // High-contrast border
-          immediate: '#ef4444', // Emergency Red (Immediate Triage)
-          delayed: '#f59e0b',   // Warning Yellow (Delayed Triage)
-          minor: '#10b981',     // Stable Green (Minor Triage)
-          expectant: '#334155', // Deceased Black / Expectant Triage
+        // AidConnect & UX4G Brand Tokens
+        aid: {
+          primary: '#D93829',      // Terracotta Red / Crimson
+          hover: '#B91C1C',        // Deep Terracotta Hover
+          light: '#FDF2F1',        // Soft Coral tint
+          border: '#F87171',       // Coral accent border
+          surface: '#F8F9FA',      // Soft Off-White light mode
+          card: '#FFFFFF',         // Pure White Card
+          borderLight: '#E2E8F0',  // Subtle grey border
+          darkSurface: '#0F172A',  // Operational Dark Slate
+          darkCard: '#1E293B',     // Card Slate
+          darkBorder: '#334155',   // High-contrast slate border
         },
+        // Semantic High-Contrast Triage Tokens (WCAG AAA compliant)
         triage: {
           immediate: {
-            DEFAULT: '#ef4444',
-            light: '#f87171',
-            dark: '#dc2626',
-            bg: 'rgba(239, 68, 68, 0.15)'
+            DEFAULT: '#DC2626',    // Red 600
+            hover: '#B91C1C',
+            bg: '#FEF2F2',
+            border: '#F87171',
+            text: '#991B1B',
           },
           delayed: {
-            DEFAULT: '#f59e0b',
-            light: '#fbbf24',
-            dark: '#d97706',
-            bg: 'rgba(245, 158, 11, 0.15)'
+            DEFAULT: '#D97706',    // Amber 600
+            hover: '#B45309',
+            bg: '#FFFBEB',
+            border: '#FCD34D',
+            text: '#92400E',
           },
           minor: {
-            DEFAULT: '#10b981',
-            light: '#34d399',
-            dark: '#059669',
-            bg: 'rgba(16, 185, 129, 0.15)'
+            DEFAULT: '#059669',    // Emerald 600
+            hover: '#047857',
+            bg: '#ECFDF5',
+            border: '#6EE7B7',
+            text: '#065F46',
           },
           expectant: {
-            DEFAULT: '#334155',
-            light: '#475569',
-            dark: '#1e293b',
-            bg: 'rgba(51, 65, 85, 0.25)'
-          }
-        }
+            DEFAULT: '#334155',    // Slate 700
+            hover: '#1E293B',
+            bg: '#F1F5F9',
+            border: '#94A3B8',
+            text: '#1E293B',
+          },
+        },
+        resq: {
+          dark: '#0f172a',
+          card: '#1e293b',
+          border: '#334155',
+          immediate: '#DC2626',
+          delayed: '#D97706',
+          minor: '#059669',
+          expectant: '#334155',
+        },
       },
       boxShadow: {
-        'emergency-glow': '0 0 15px rgba(239, 68, 68, 0.35)',
-        'warning-glow': '0 0 15px rgba(245, 158, 11, 0.35)',
-        'stable-glow': '0 0 15px rgba(16, 185, 129, 0.35)',
+        'aid-card': '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03)',
+        'aid-raised': '0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04)',
+        'emergency-glow': '0 0 15px rgba(220, 38, 38, 0.35)',
+        'warning-glow': '0 0 15px rgba(217, 119, 6, 0.35)',
+        'stable-glow': '0 0 15px rgba(5, 150, 105, 0.35)',
+      },
+      minHeight: {
+        'touch': '48px',
+        'touch-lg': '56px',
+      },
+      minWidth: {
+        'touch': '48px',
+        'touch-lg': '56px',
       },
       animation: {
         'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
