@@ -13,6 +13,7 @@ import { DemoToolbar } from './components/DemoToolbar';
 import { TriageFormModal } from './components/TriageFormModal';
 import { useTriage } from './hooks/useTriage';
 import { useNetworkStatus } from './hooks/useNetworkStatus';
+import { useTranslation } from './i18n/LanguageContext';
 
 export function App() {
   const {
@@ -41,11 +42,18 @@ export function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [emergencyMode, setEmergencyMode] = useState(false);
-  const [activeLanguage, setActiveLanguage] = useState('en');
+  const { language: activeLanguage, setLanguage: setActiveLanguage } = useTranslation();
 
   // Modals
   const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
   const [activeConflictModal, setActiveConflictModal] = useState(null);
+  const [quotaExceeded, setQuotaExceeded] = useState(false);
+
+  useEffect(() => {
+    const handleQuotaExceeded = () => setQuotaExceeded(true);
+    window.addEventListener('gmp-quota-exceeded', handleQuotaExceeded);
+    return () => window.removeEventListener('gmp-quota-exceeded', handleQuotaExceeded);
+  }, []);
 
   // Sync Emergency Mode class with document body for global sizing (UX4G standard)
   useEffect(() => {
@@ -79,32 +87,32 @@ export function App() {
     }
 
     const target = records[0] || {
-      id: 'REC-104',
-      victimName: 'Victim #104 (Marcus Ramirez)',
+      id: 'REC-WY-204',
+      victimName: 'Aarav Sharma',
       triageLevel: 'delayed',
-      location: 'Building B · Floor 2 · Stairwell A',
-      statusNotes: 'Local Responder (Team Alpha): Conscious, bleeding stabilized, compound fracture splinted.',
+      location: 'Meppadi Junction • Relief Post 1',
+      statusNotes: 'Inspector Rajesh Nair (NDRF QRT): Conscious, bleeding stabilized, compound fracture splinted.',
       version: 1,
     };
 
     const simulated = {
       serverRecord: {
         id: target.id,
-        victimName: target.victimName || 'Victim #104',
+        victimName: target.victimName || 'Aarav Sharma',
         triageLevel: 'immediate', // Remote override
-        location: 'Sector 4 · Mobile Field Hospital 01',
-        statusNotes: 'OVERRIDE by Team Beta (Tablet-02): Patient vitals deteriorating rapidly. Respiratory rate 36/min, SpO2 83%.',
-        responderId: 'Team Beta (Tablet-02)',
-        deviceId: 'Device-Tablet-02',
+        location: 'Chooralmala Transit Ambulance • En route to Kalpetta',
+        statusNotes: 'Dr. Sunita Rao (Ambulance 04): SpO2 dipped to 84%, respiratory distress worsening. Upgrading to RED (Immediate) for emergency trauma admission.',
+        responderId: 'Dr. Sunita Rao (Ambulance 04)',
+        deviceId: 'Tablet-Unit-04',
         version: (target.version ?? 1) + 2,
         updatedAt: new Date().toISOString(),
       },
       clientPayload: {
         ...target,
         triageLevel: 'delayed',
-        statusNotes: target.statusNotes || 'Local Responder (Team Alpha): Stable breathing, awaits transport.',
-        responderId: 'Team Alpha (Local)',
-        deviceId: 'Device-Phone-01',
+        statusNotes: target.statusNotes || 'Inspector Rajesh Nair (NDRF QRT): Conscious, left leg splinted, vitals steady.',
+        responderId: 'Inspector Rajesh Nair (NDRF QRT)',
+        deviceId: 'Handset-Field-01',
         version: target.version ?? 1,
       },
     };
@@ -120,6 +128,24 @@ export function App() {
   return (
     <div className="min-h-screen bg-[#F8F7F5] text-ink flex flex-col font-sans transition-colors pb-24 md:pb-20">
       
+      {/* ── 0. Google Maps Platform Quota Notice ── */}
+      {quotaExceeded && (
+        <div className="bg-amber-50 border-b border-amber-200 text-amber-900 px-4 py-2.5 text-xs md:text-sm text-center sticky top-0 z-50 shadow-sm">
+          <span>
+            Google Maps Platform quota reached. If you are the app owner, visit{' '}
+            <a
+              href="https://developers.google.com/maps/ai/ai-studio?utm_campaign=gmp_mcp_codeassist_v1_aistudio#quota_exceeded_errors"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline font-semibold text-amber-950 hover:text-amber-800"
+            >
+              maps developer site
+            </a>{' '}
+            for instructions to update your account.
+          </span>
+        </div>
+      )}
+
       {/* ── 1. Top High-Contrast Offline / Connectivity Status Bar (UX4G Standard) ── */}
       <OfflineBanner
         isOnline={isOnline}

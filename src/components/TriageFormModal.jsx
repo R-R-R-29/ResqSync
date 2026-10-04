@@ -13,7 +13,7 @@ export function TriageFormModal({ isOpen, onClose, onSubmit }) {
     pulse_rate: '',
     mental_status: 'Alert',
     injuries: '',
-    field_unit_id: 'Zone A — Building 3'
+    field_unit_id: 'Chooralmala Relief Post • Sector 3'
   });
 
   if (!isOpen) return null;

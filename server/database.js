@@ -401,31 +401,31 @@ export function injectConflictRecord(targetId) {
         vectorClock = :vc
        WHERE id = :id`,
       {
-        ':vn':  existing.victimName || 'Marcus Ramirez',
-        ':tl':  'immediate', // Conflicting triage level: RED
-        ':loc': 'Sector 4 - Intensive Care Transit Unit',
-        ':sn':  'OVERRIDE BY Device-Tablet-02: Vital signs deteriorating rapidly. SpO2 84%, tension pneumothorax detected.',
-        ':ri':  'Dr. Morales (Tablet-02)',
-        ':di':  'Device-Tablet-02',
+        ':vn':  existing.victimName || 'Aarav Sharma',
+        ':tl':  'immediate',
+        ':loc': 'Chooralmala Transit Ambulance • En route to Kalpetta',
+        ':sn':  'Dr. Sunita Rao (Ambulance 04): SpO2 dipped to 84%, respiratory distress worsening. Upgrading to RED (Immediate) for emergency trauma admission.',
+        ':ri':  'Dr. Sunita Rao (Ambulance 04)',
+        ':di':  'Tablet-Unit-04',
         ':ua':  now,
         ':v':   newVersion,
-        ':vc':  JSON.stringify({ 'Device-Tablet-02': newVersion }),
+        ':vc':  JSON.stringify({ 'Tablet-Unit-04': newVersion }),
         ':id':  id,
       }
     );
   } else {
     _insertRecord({
       id,
-      victimName:  'Marcus Ramirez',
+      victimName:  'Aarav Sharma',
       triageLevel: 'immediate',
-      location:    'Sector 4 - Intensive Care Transit Unit',
-      statusNotes: 'OVERRIDE BY Device-Tablet-02: Vital signs deteriorating rapidly. SpO2 84%, tension pneumothorax detected.',
-      responderId: 'Dr. Morales (Tablet-02)',
-      deviceId:    'Device-Tablet-02',
+      location:    'Chooralmala Transit Ambulance • En route to Kalpetta',
+      statusNotes: 'Dr. Sunita Rao (Ambulance 04): SpO2 dipped to 84%, respiratory distress worsening. Upgrading to RED (Immediate) for emergency trauma admission.',
+      responderId: 'Dr. Sunita Rao (Ambulance 04)',
+      deviceId:    'Tablet-Unit-04',
       updatedAt:   now,
       version:     newVersion,
       deleted:     false,
-      vectorClock: { 'Device-Tablet-02': newVersion },
+      vectorClock: { 'Tablet-Unit-04': newVersion },
     });
   }
 

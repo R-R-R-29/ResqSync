@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Zap,
 } from 'lucide-react';
+import { useTranslation } from '../../i18n/LanguageContext';
 
 export function FilterBar({
   activeFilter = 'all',
@@ -18,34 +19,36 @@ export function FilterBar({
   emergencyMode = false,
   className = '',
 }) {
+  const { t } = useTranslation();
+
   const CHIPS = [
     {
       id: 'all',
-      label: 'All Casualties',
+      label: t('allManifest', 'All Casualties'),
       count: counts.total || 0,
       activeClass: 'bg-ink text-white border-ink shadow-sm',
     },
     {
       id: 'immediate',
-      label: 'RED • Critical',
+      label: t('immediate', 'RED • Critical'),
       count: counts.immediate || 0,
       activeClass: 'bg-coral text-white border-coral shadow-sm',
     },
     {
       id: 'delayed',
-      label: 'YELLOW • Urgent',
+      label: t('delayed', 'YELLOW • Urgent'),
       count: counts.delayed || 0,
       activeClass: 'bg-[#E5A33D] text-white border-[#E5A33D] shadow-sm',
     },
     {
       id: 'minor',
-      label: 'GREEN • Minor',
+      label: t('minor', 'GREEN • Minor'),
       count: counts.minor || 0,
       activeClass: 'bg-[#4F9D69] text-white border-[#4F9D69] shadow-sm',
     },
     {
       id: 'unsynced',
-      label: '⚡ Unsynced',
+      label: `⚡ ${t('metricOfflineTitle', 'Unsynced')}`,
       count: counts.unsynced || 0,
       activeClass: 'bg-[#E5A33D] text-white border-[#E5A33D] shadow-sm',
     },
@@ -65,7 +68,7 @@ export function FilterBar({
         <input
           id="casualty-search"
           type="search"
-          placeholder="Search by ID (e.g. RSQ-1042), Name, Zone, or Notes..."
+          placeholder={t('searchPlaceholder', 'Search by ID (e.g. RSQ-1042), Name, Zone, or Notes...')}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className={`w-full bg-white border border-outline rounded-full pl-11 pr-10 text-ink placeholder-ink-light focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral-light shadow-soft transition ${

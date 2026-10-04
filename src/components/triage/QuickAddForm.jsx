@@ -10,45 +10,7 @@ import {
   Check,
 } from 'lucide-react';
 import { UX4GButton } from '../common/UX4GButton';
-
-const TRIAGE_TIERS = [
-  {
-    id: 'immediate',
-    name: 'RED • Immediate',
-    subtitle: 'Critical / Life-Threatening',
-    icon: AlertCircle,
-    activeClasses: 'bg-[#FDE3DF] text-[#C94336] border-[#FBCBC4] ring-2 ring-coral',
-    inactiveClasses: 'bg-white text-ink border-outline hover:border-[#FBCBC4]',
-    dotClass: 'bg-[#D94343]',
-  },
-  {
-    id: 'delayed',
-    name: 'YELLOW • Delayed',
-    subtitle: 'Serious / Non-Life-Threatening',
-    icon: Clock,
-    activeClasses: 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A] ring-2 ring-[#E5A33D]',
-    inactiveClasses: 'bg-white text-ink border-outline hover:border-[#FDE68A]',
-    dotClass: 'bg-[#E5A33D]',
-  },
-  {
-    id: 'minor',
-    name: 'GREEN • Minor',
-    subtitle: 'Walking Wounded / Minimal',
-    icon: CheckCircle2,
-    activeClasses: 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0] ring-2 ring-[#4F9D69]',
-    inactiveClasses: 'bg-white text-ink border-outline hover:border-[#A7F3D0]',
-    dotClass: 'bg-[#4F9D69]',
-  },
-  {
-    id: 'expectant',
-    name: 'BLACK • Expectant',
-    subtitle: 'Deceased / Non-Survivable',
-    icon: Activity,
-    activeClasses: 'bg-[#F3F1EF] text-ink border-[#C4BFBA] ring-2 ring-ink',
-    inactiveClasses: 'bg-white text-ink border-outline hover:border-[#C4BFBA]',
-    dotClass: 'bg-[#171717]',
-  },
-];
+import { useTranslation } from '../../i18n/LanguageContext';
 
 export function QuickAddForm({
   onSubmit,
@@ -56,6 +18,47 @@ export function QuickAddForm({
   emergencyMode = false,
   className = '',
 }) {
+  const { t } = useTranslation();
+
+  const TRIAGE_TIERS = [
+    {
+      id: 'immediate',
+      name: t('immediate', 'RED • Immediate'),
+      subtitle: t('immediateSub', 'Critical / Life-Threatening'),
+      icon: AlertCircle,
+      activeClasses: 'bg-[#FDE3DF] text-[#C94336] border-[#FBCBC4] ring-2 ring-coral',
+      inactiveClasses: 'bg-white text-ink border-outline hover:border-[#FBCBC4]',
+      dotClass: 'bg-[#D94343]',
+    },
+    {
+      id: 'delayed',
+      name: t('delayed', 'YELLOW • Delayed'),
+      subtitle: t('delayedSub', 'Serious / Non-Life-Threatening'),
+      icon: Clock,
+      activeClasses: 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A] ring-2 ring-[#E5A33D]',
+      inactiveClasses: 'bg-white text-ink border-outline hover:border-[#FDE68A]',
+      dotClass: 'bg-[#E5A33D]',
+    },
+    {
+      id: 'minor',
+      name: t('minor', 'GREEN • Minor'),
+      subtitle: t('minorSub', 'Walking Wounded / Minimal'),
+      icon: CheckCircle2,
+      activeClasses: 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0] ring-2 ring-[#4F9D69]',
+      inactiveClasses: 'bg-white text-ink border-outline hover:border-[#A7F3D0]',
+      dotClass: 'bg-[#4F9D69]',
+    },
+    {
+      id: 'expectant',
+      name: t('expectant', 'BLACK • Expectant'),
+      subtitle: t('expectantSub', 'Deceased / Non-Survivable'),
+      icon: Activity,
+      activeClasses: 'bg-[#F3F1EF] text-ink border-[#C4BFBA] ring-2 ring-ink',
+      inactiveClasses: 'bg-white text-ink border-outline hover:border-[#C4BFBA]',
+      dotClass: 'bg-[#171717]',
+    },
+  ];
+
   const [victimName, setVictimName] = useState('');
   const [location, setLocation] = useState('');
   const [statusNotes, setStatusNotes] = useState('');
@@ -74,7 +77,7 @@ export function QuickAddForm({
 
     const trimmedName = victimName.trim();
     const finalVictimName = trimmedName || `RSQ-${Math.floor(1000 + Math.random() * 9000)}`;
-    const finalLocation = location.trim() || 'Zone A · Building 3';
+    const finalLocation = location.trim() || 'Chooralmala Relief Post • Sector 3';
 
     setSubmitting(true);
     try {
@@ -123,10 +126,10 @@ export function QuickAddForm({
         <div>
           <h2 className="text-base sm:text-lg font-bold text-ink tracking-tight flex items-center gap-2">
             <UserPlus className="w-5 h-5 text-coral" aria-hidden="true" />
-            <span>Casualty Registration</span>
+            <span>{t('casualtyRegistration', 'Casualty Registration')}</span>
           </h2>
           <p className="text-xs text-ink-secondary mt-0.5">
-            Offline-first intake. Records are immediately persisted to local IndexedDB.
+            {t('casualtyRegSub', 'Offline-first intake. Records are immediately persisted to local IndexedDB.')}
           </p>
         </div>
 
@@ -134,12 +137,12 @@ export function QuickAddForm({
           {isOnline ? (
             <>
               <span className="w-2 h-2 rounded-full bg-[#4F9D69]" />
-              <span>Direct Sync</span>
+              <span>{t('directSync', 'Direct Sync')}</span>
             </>
           ) : (
             <>
               <Zap className="w-3.5 h-3.5 text-[#E5A33D]" />
-              <span>Outbox Queued</span>
+              <span>{t('offlineQueue', 'Outbox Queued')}</span>
             </>
           )}
         </div>
@@ -147,10 +150,10 @@ export function QuickAddForm({
 
       <form onSubmit={handleSubmit} className="space-y-4">
         
-        {/* 1. Triage Severity Selector (Soft Tinted Rounded Buttons) */}
+        {/* 1. Triage Severity Selector */}
         <div>
           <label className="block font-bold text-xs uppercase tracking-wider text-ink-secondary mb-2">
-            Triage Status <span className="text-coral">*</span>
+            {t('triageStatus', 'Triage Status')} <span className="text-coral">*</span>
           </label>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
@@ -185,7 +188,7 @@ export function QuickAddForm({
           </div>
         </div>
 
-        {/* 2. Grouped Input Fields (Labels Strictly Above) */}
+        {/* 2. Grouped Input Fields */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 pt-1">
           {/* Victim ID */}
           <div className="md:col-span-5">
@@ -194,7 +197,7 @@ export function QuickAddForm({
                 htmlFor="victim-name-field"
                 className="font-bold text-xs text-ink"
               >
-                Victim Identifier / Name <span className="text-coral">*</span>
+                {t('victimIdLabel', 'Victim Identifier / Name')} <span className="text-coral">*</span>
               </label>
               <button
                 type="button"
@@ -203,13 +206,13 @@ export function QuickAddForm({
                 title="Generate casualty ID tag"
               >
                 <Sparkles className="w-3 h-3" />
-                <span>Auto ID</span>
+                <span>{t('autoId', 'Auto ID')}</span>
               </button>
             </div>
             <input
               id="victim-name-field"
               type="text"
-              placeholder="e.g. RSQ-1042 or Marcus Ramirez"
+              placeholder={t('victimNamePlaceholder', 'e.g. Rajeshwar Sen or Tag KL-WY-104')}
               value={victimName}
               onChange={(e) => setVictimName(e.target.value)}
               className={`w-full bg-white border border-outline rounded-2xl px-4 text-ink placeholder-ink-light focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral-light transition ${
@@ -224,12 +227,12 @@ export function QuickAddForm({
               htmlFor="location-field"
               className="block font-bold text-xs text-ink mb-1.5"
             >
-              Location (Building / Floor / Zone) <span className="text-coral">*</span>
+              {t('locationLabel', 'Location (Sector / Camp / Post)')} <span className="text-coral">*</span>
             </label>
             <input
               id="location-field"
               type="text"
-              placeholder="e.g. Zone A — Building 3, Floor 2"
+              placeholder={t('locationPlaceholder', 'e.g. Chooralmala Market Junction • Near Bridge')}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className={`w-full bg-white border border-outline rounded-2xl px-4 text-ink placeholder-ink-light focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral-light transition ${
@@ -245,12 +248,12 @@ export function QuickAddForm({
             htmlFor="notes-field"
             className="block font-bold text-xs text-ink mb-1.5"
           >
-            Medical Observations & Trauma Notes
+            {t('medicalNotesLabel', 'Medical Observations & Trauma Notes')}
           </label>
           <textarea
             id="notes-field"
             rows="2"
-            placeholder="e.g. Chest trauma, conscious, splint applied at 14:20..."
+            placeholder={t('medicalNotesPlaceholder', 'e.g. Blunt chest trauma, conscious, pressure dressing applied at 14:20...')}
             value={statusNotes}
             onChange={(e) => setStatusNotes(e.target.value)}
             className="w-full bg-white border border-outline rounded-2xl p-3.5 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral-light transition resize-none"
@@ -263,12 +266,12 @@ export function QuickAddForm({
             <div className="flex items-center space-x-2 text-xs font-bold text-[#065F46] bg-[#ECFDF5] border border-[#A7F3D0] px-4 py-2.5 rounded-full animate-in fade-in">
               <Check className="w-4 h-4 text-[#4F9D69]" />
               <span>
-                Registered <strong>{successToast.name}</strong> [{successToast.level}] — {successToast.online ? 'Synced to Command' : 'Saved Locally in Outbox'}
+                <strong>{successToast.name}</strong> [{successToast.level}] {t('successToast', 'registered successfully')}
               </span>
             </div>
           ) : (
             <span className="text-xs text-ink-muted font-medium">
-              Offline-ready: safely saved even if connection drops.
+              {t('casualtyRegSub', 'Offline-ready: safely saved even if connection drops.')}
             </span>
           )}
 
@@ -281,7 +284,7 @@ export function QuickAddForm({
             emergencyMode={emergencyMode}
             className="w-full sm:w-auto shadow-sm"
           >
-            {submitting ? 'Registering...' : '+ Register Casualty'}
+            {submitting ? t('saving', 'Saving Record...') : t('commitRecord', 'Commit Casualty Record')}
           </UX4GButton>
         </div>
 

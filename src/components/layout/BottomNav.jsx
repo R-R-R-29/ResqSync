@@ -6,15 +6,8 @@ import {
   AlertTriangle,
   Settings,
 } from 'lucide-react';
+import { useTranslation } from '../../i18n/LanguageContext';
 
-/**
- * BottomNav
- * Mobile Navigation (< 768px) per reference mobile app design:
- * - Crisp white surface with subtle top border
- * - Active coral state with pill indicator
- * - Muted inactive state
- * - Clean badges for unsynced and conflict records
- */
 export function BottomNav({
   activeTab = 'dashboard',
   onSelectTab,
@@ -22,24 +15,26 @@ export function BottomNav({
   unsyncedCount = 0,
   emergencyMode = false,
 }) {
+  const { t } = useTranslation();
+
   const NAV_ITEMS = [
-    { id: 'dashboard', label: 'Home', icon: Home },
+    { id: 'dashboard', label: t('navHome', 'Home'), icon: Home },
     {
       id: 'records',
-      label: 'Casualties',
+      label: t('navCasualties', 'Casualties'),
       icon: Users,
       badge: unsyncedCount > 0 ? unsyncedCount : null,
       badgeClass: 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]',
     },
-    { id: 'map', label: 'Map', icon: MapPin },
+    { id: 'map', label: t('navMap', 'Map'), icon: MapPin },
     {
       id: 'conflicts',
-      label: 'Conflicts',
+      label: t('navConflicts', 'Conflicts'),
       icon: AlertTriangle,
       badge: conflictCount > 0 ? conflictCount : null,
       badgeClass: 'bg-[#FDE3DF] text-[#C94336] border-[#FBCBC4] animate-pulse',
     },
-    { id: 'settings', label: 'More', icon: Settings },
+    { id: 'settings', label: t('navSettings', 'Settings'), icon: Settings },
   ];
 
   return (

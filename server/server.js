@@ -254,12 +254,12 @@ app.post('/api/demo/conflict', (req, res) => {
     const clientPayload = {
       id:              serverRecord.id,
       victimName:      serverRecord.victimName,
-      triageLevel:     'delayed', // Local responder triaged as YELLOW
+      triageLevel:     'delayed',
       triage_category: 'delayed',
-      location:        'Sector 4 - Stairwell B, East Tower',
-      statusNotes:     'Local Responder: Conscious, stable breathing, splint applied to left femur.',
-      responderId:     'FIELD-UNIT-1',
-      deviceId:        'Device-Phone-01',
+      location:        'Meppadi Junction • Relief Post 1',
+      statusNotes:     'Inspector Rajesh Nair (NDRF QRT): Conscious, compound fracture on right leg splinted and dressed. Vitals steady.',
+      responderId:     'Inspector Rajesh Nair (NDRF QRT)',
+      deviceId:        'Handset-Field-01',
       version:         1,
       updatedAt:       new Date(Date.now() - 60000).toISOString(),
     };
@@ -273,7 +273,7 @@ app.post('/api/demo/conflict', (req, res) => {
 
     res.json({
       success: true,
-      message: 'Conflict injected successfully from Device-Tablet-02',
+      message: 'Conflict injected successfully between Field Unit 1 and Ambulance Unit 4',
       conflict: { serverRecord, clientPayload },
     });
   } catch (err) {

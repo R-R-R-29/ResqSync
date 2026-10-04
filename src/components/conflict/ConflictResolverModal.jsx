@@ -25,8 +25,8 @@ export function ConflictResolverModal({
   const server = conflict.serverRecord || {};
   const client = conflict.clientPayload || {};
 
-  const teamAName = client.responderId || client.deviceId || 'Team Alpha (Local)';
-  const teamBName = server.responderId || server.deviceId || 'Team Beta (Tablet-02)';
+  const teamAName = client.responderId || client.deviceId || 'Inspector Rajesh Nair (NDRF QRT)';
+  const teamBName = server.responderId || server.deviceId || 'Dr. Sunita Rao (Ambulance 04)';
 
   const triageA = (client.triageLevel || client.triage_category || 'delayed').toLowerCase();
   const triageB = (server.triageLevel || server.triage_category || 'immediate').toLowerCase();
@@ -40,12 +40,12 @@ export function ConflictResolverModal({
   const [activeMode, setActiveMode] = useState('decision'); // 'decision' | 'merge_editor'
   const [mergedTriage, setMergedTriage] = useState(triageB); // default to higher severity for safety
   const [mergedNotes, setMergedNotes] = useState(
-    `[${teamAName}]: ${client.statusNotes || 'Initial assessment'}\n[${teamBName}]: ${server.statusNotes || 'Updated field status'}`
+    `[${teamAName}]: ${client.statusNotes || 'Conscious, splint applied.'}\n[${teamBName}]: ${server.statusNotes || 'SpO2 84%, upgraded to RED.'}`
   );
-  const [mergedLocation, setMergedLocation] = useState(server.location || client.location || 'Zone A');
+  const [mergedLocation, setMergedLocation] = useState(server.location || client.location || 'Meppadi Relief Post • Sector 3');
   const [isResolving, setIsResolving] = useState(false);
 
-  // Resolution 1: Keep Team Alpha (Client)
+  // Resolution 1: Keep Field Unit (Client)
   const handleKeepAlpha = async () => {
     if (isRedToGreenSafetyAlert && !safetyConfirmed) return;
     setIsResolving(true);
@@ -62,13 +62,13 @@ export function ConflictResolverModal({
       if (onResolved) onResolved(resolved);
       onClose();
     } catch (err) {
-      console.error('[ConflictResolver] Failed to keep Team Alpha edit:', err);
+      console.error('[ConflictResolver] Failed to keep field unit edit:', err);
     } finally {
       setIsResolving(false);
     }
   };
 
-  // Resolution 2: Keep Team Beta (Server)
+  // Resolution 2: Keep Ambulance Unit (Server)
   const handleKeepBeta = async () => {
     setIsResolving(true);
     try {
@@ -81,7 +81,7 @@ export function ConflictResolverModal({
       if (onResolved) onResolved(canonical);
       onClose();
     } catch (err) {
-      console.error('[ConflictResolver] Failed to keep Team Beta edit:', err);
+      console.error('[ConflictResolver] Failed to keep ambulance unit edit:', err);
     } finally {
       setIsResolving(false);
     }
@@ -232,8 +232,8 @@ export function ConflictResolverModal({
 
             <DiffField
               label="Casualty Location"
-              valueA={client.location || 'Zone A · Building 3'}
-              valueB={server.location || 'Sector 4 · Field Hospital 01'}
+              valueA={client.location || 'Meppadi Junction • Relief Post 1'}
+              valueB={server.location || 'Chooralmala Transit Ambulance • En route to Kalpetta'}
               labelA={teamAName}
               labelB={teamBName}
               isDifferent={(client.location || '') !== (server.location || '')}
@@ -241,8 +241,8 @@ export function ConflictResolverModal({
 
             <DiffField
               label="Medical & Trauma Notes"
-              valueA={client.statusNotes || 'Initial assessment: conscious, stable splint.'}
-              valueB={server.statusNotes || 'Vitals deteriorating, breathing rate 36/min.'}
+              valueA={client.statusNotes || 'Initial assessment: conscious, compound fracture splinted.'}
+              valueB={server.statusNotes || 'Vitals dropped on transit, SpO2 84%, breath sounds diminished.'}
               labelA={teamAName}
               labelB={teamBName}
               isDifferent={(client.statusNotes || '') !== (server.statusNotes || '')}

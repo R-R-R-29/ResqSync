@@ -7,6 +7,7 @@ import {
 import { FilterBar } from '../triage/FilterBar';
 import { TriageCard } from '../triage/TriageCard';
 import { UX4GButton } from '../common/UX4GButton';
+import { useTranslation } from '../../i18n/LanguageContext';
 
 export function CasualtiesView({
   records = [],
@@ -18,6 +19,7 @@ export function CasualtiesView({
   emergencyMode = false,
   onOpenIntakeModal,
 }) {
+  const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -65,14 +67,14 @@ export function CasualtiesView({
       <div className="bg-white p-5 sm:p-6 rounded-3xl border border-outline shadow-soft flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-coral uppercase tracking-wider block mb-1">
-            Operational Field Census
+            {t('stateReliefCommand', 'Wayanad Casualty Manifest')}
           </span>
           <h1 className="text-xl sm:text-2xl font-black text-ink tracking-tight flex items-center gap-2">
             <Users className="w-5 h-5 text-coral" aria-hidden="true" />
-            <span>Casualties Registry</span>
+            <span>{t('manifestTitle', 'Casualty Register & Triage Roster')}</span>
           </h1>
           <p className="text-xs sm:text-sm text-ink-secondary mt-0.5">
-            Showing {filteredRecords.length} of {records.length} total casualties in Sector 4.
+            {filteredRecords.length} / {records.length} {t('navCasualties', 'casualties logged')}
           </p>
         </div>
 
@@ -84,7 +86,7 @@ export function CasualtiesView({
             onClick={onOpenIntakeModal}
             emergencyMode={emergencyMode}
           >
-            + Register Casualty
+            + {t('casualtyRegistration', 'Register Casualty')}
           </UX4GButton>
         )}
       </div>
@@ -111,7 +113,7 @@ export function CasualtiesView({
             <Layers className="w-6 h-6" />
           </div>
           <h3 className="text-base font-bold text-ink">
-            No Casualties Found
+            {t('noCasualtiesFound', 'No Casualties Found')}
           </h3>
           <p className="text-xs text-ink-secondary max-w-sm mx-auto mt-1 mb-4 leading-relaxed">
             {searchQuery || activeFilter !== 'all'
@@ -137,7 +139,7 @@ export function CasualtiesView({
                 icon={Plus}
                 onClick={onOpenIntakeModal}
               >
-                Add Casualty
+                + {t('casualtyRegistration', 'Add Casualty')}
               </UX4GButton>
             )}
           </div>

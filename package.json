@@ -4,13 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run server\" \"npm run client\"",
-    "client": "vite",
-    "server": "nodemon server/server.js",
+    "dev": "tsx server.ts",
     "build": "vite build",
+    "start": "tsx server.ts",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vis.gl/react-google-maps": "^1.10.1",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -20,6 +20,7 @@
     "react-dom": "^19.0.0",
     "sql.js": "^1.14.2",
     "tailwind-merge": "^3.0.1",
+    "tsx": "^4.23.15",
     "uuid": "^11.0.5",
     "ws": "^8.18.0"
   },

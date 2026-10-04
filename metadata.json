@@ -1,0 +1,7 @@
+{
+  "name": "ResqSync",
+  "description": "Offline-first disaster response and emergency triage platform",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

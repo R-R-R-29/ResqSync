@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
+import { useTranslation } from '../../i18n/LanguageContext';
 
 export function Sidebar({
   activeTab = 'dashboard',
@@ -23,18 +24,20 @@ export function Sidebar({
   setIsCollapsed,
   emergencyMode = false,
 }) {
+  const { t } = useTranslation();
+
   const NAV_ITEMS = [
-    { id: 'dashboard', label: 'Home', icon: Home, count: null },
-    { id: 'records', label: 'Casualties', icon: Users, count: recordsCount },
-    { id: 'map', label: 'Map / Field', icon: MapPin, count: null },
+    { id: 'dashboard', label: t('navHome', 'Home'), icon: Home, count: null },
+    { id: 'records', label: t('navCasualties', 'Casualties'), icon: Users, count: recordsCount },
+    { id: 'map', label: t('navMap', 'Map / Field'), icon: MapPin, count: null },
     {
       id: 'conflicts',
-      label: 'Conflicts',
+      label: t('navConflicts', 'Conflicts'),
       icon: AlertTriangle,
       count: conflictCount > 0 ? conflictCount : null,
       highlight: conflictCount > 0,
     },
-    { id: 'settings', label: 'Settings', icon: Settings, count: null },
+    { id: 'settings', label: t('navSettings', 'Settings'), icon: Settings, count: null },
   ];
 
   return (
@@ -68,13 +71,17 @@ export function Sidebar({
             {!isCollapsed && (
               <div className="min-w-0 flex-1">
                 <div className="text-xs font-bold text-ink truncate">
-                  {!isOnline ? 'Offline Safe' : conflictCount > 0 ? 'Conflict Alert' : 'Command Synced'}
+                  {!isOnline
+                    ? t('offlineMode', 'Offline Safe')
+                    : conflictCount > 0
+                    ? t('conflictTitle', 'Conflict Alert')
+                    : t('baseLinked', 'Command Synced')}
                 </div>
                 <div className="text-[11px] text-ink-secondary truncate">
                   {!isOnline
-                    ? `${pendingCount} saved in outbox`
+                    ? `${pendingCount} ${t('metricOfflineSub', 'saved in outbox')}`
                     : conflictCount > 0
-                    ? `${conflictCount} reviews required`
+                    ? `${conflictCount} ${t('metricConflictTitle', 'reviews required')}`
                     : 'Real-time WebSocket'}
                 </div>
               </div>
@@ -135,7 +142,7 @@ export function Sidebar({
           <div className="p-3.5 rounded-2xl bg-coral-light/50 border border-coral-light">
             <div className="flex items-center space-x-2 text-coral font-bold text-xs uppercase tracking-wider mb-1">
               <PhoneCall className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>Emergency Helpline</span>
+              <span>{t('emergencyHelpline', 'Emergency Helpline')}</span>
             </div>
             <div className="text-base font-black text-ink font-mono">
               1078 <span className="text-xs text-ink-muted font-normal">/ 112 SOS</span>

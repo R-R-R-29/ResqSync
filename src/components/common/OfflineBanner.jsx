@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   ArrowRight,
 } from 'lucide-react';
+import { useTranslation } from '../../i18n/LanguageContext';
 
 export function OfflineBanner({
   isOnline = true,
@@ -16,7 +17,9 @@ export function OfflineBanner({
   conflictCount = 0,
   onResolveConflict,
 }) {
-  // 1. 🔴 Action Required: Conflict Detected (Soft Coral card with clear icon & action)
+  const { t } = useTranslation();
+
+  // 1. 🔴 Action Required: Conflict Detected
   if (conflictCount > 0 || syncState === 'CONFLICT') {
     return (
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-1">
@@ -30,9 +33,9 @@ export function OfflineBanner({
               <AlertTriangle className="w-4 h-4 animate-bounce" aria-hidden="true" />
             </div>
             <div>
-              <strong className="font-bold text-[#171717]">CONFLICTS REQUIRE ATTENTION</strong>
+              <strong className="font-bold text-[#171717]">{t('conflictTitle', 'SYNC DISCREPANCY DETECTED')}</strong>
               <span className="block text-xs text-[#66615D] sm:inline sm:ml-2">
-                {conflictCount} casualty record{conflictCount > 1 ? 's' : ''} updated concurrently while offline.
+                {conflictCount} {t('conflictSub', 'casualty records received differing field updates from another unit.')}
               </span>
             </div>
           </div>
@@ -41,7 +44,7 @@ export function OfflineBanner({
               onClick={onResolveConflict}
               className="shrink-0 ml-3 px-4 py-1.5 bg-[#E85B4A] hover:bg-[#C94336] text-white rounded-full text-xs font-bold transition shadow-sm flex items-center gap-1.5 min-h-[38px]"
             >
-              <span>Review Conflict</span>
+              <span>{t('resolveConflictsBtn', 'Review Differences')}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           )}
@@ -50,7 +53,7 @@ export function OfflineBanner({
     );
   }
 
-  // 2. 🟠 Offline & Changes Queued (Calm warm neutral card, not an aggressive error)
+  // 2. 🟠 Offline & Changes Queued
   if (!isOnline) {
     return (
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-1">
@@ -66,10 +69,10 @@ export function OfflineBanner({
             <div>
               <span className="inline-flex items-center gap-1.5 font-bold text-[#171717]">
                 <span className="w-2 h-2 rounded-full bg-[#E5A33D]" />
-                OFFLINE — {pendingCount} {pendingCount === 1 ? 'CHANGE' : 'CHANGES'} QUEUED
+                {t('offlineStatusText', 'OFFLINE — LOGS SAVED LOCALLY')} ({pendingCount})
               </span>
               <span className="block text-xs text-[#66615D] sm:inline sm:ml-2">
-                All records stored safely in device IndexedDB. Will sync when link restores.
+                {t('logbookSub', 'Your entries remain safe on this handset and will upload automatically when signal returns.')}
               </span>
             </div>
           </div>
@@ -78,7 +81,7 @@ export function OfflineBanner({
               onClick={() => setSimulatedOffline(false)}
               className="shrink-0 ml-3 px-4 py-1.5 bg-white border border-[#E6E1DD] hover:border-[#E85B4A] text-[#171717] rounded-full text-xs font-bold transition shadow-sm min-h-[38px]"
             >
-              Resume Live Sync
+              {t('goOnlineBtn', 'Resume Live Sync')}
             </button>
           )}
         </div>
@@ -99,10 +102,7 @@ export function OfflineBanner({
             <RefreshCw className="w-4 h-4 text-[#5C83B6] animate-spin shrink-0" aria-hidden="true" />
             <div>
               <span className="font-bold text-[#171717]">
-                ● SYNCING — {pendingCount} {pendingCount === 1 ? 'CHANGE' : 'CHANGES'}
-              </span>
-              <span className="text-xs text-[#66615D] ml-2 hidden sm:inline">
-                Reconciling local mutations with central command...
+                ● {t('syncedNow', 'Syncing outbox with command server...')} ({pendingCount})
               </span>
             </div>
           </div>
@@ -111,7 +111,7 @@ export function OfflineBanner({
     );
   }
 
-  // 4. 🟢 Online & Synced (Clean, unobtrusive status bar)
+  // 4. 🟢 Online & Synced
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2.5 pb-0.5">
       <div
@@ -124,12 +124,12 @@ export function OfflineBanner({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4F9D69] opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4F9D69]"></span>
           </span>
-          <span className="font-bold text-[#171717]">ONLINE — SYNCED</span>
-          <span className="hidden sm:inline text-[#8A8580]">• Central command linked. Zero data loss protocol active.</span>
+          <span className="font-bold text-[#171717]">{t('baseLinked', 'CONNECTED')}</span>
+          <span className="hidden sm:inline text-[#8A8580]">• {t('connectedBase', 'Live link to base camp active.')}</span>
         </div>
         <div className="flex items-center space-x-1 text-[11px] text-[#8A8580] font-mono">
           <Wifi className="w-3.5 h-3.5 text-[#4F9D69]" aria-hidden="true" />
-          <span className="hidden sm:inline">WebSocket Live</span>
+          <span className="hidden sm:inline">{t('baseLinked', 'Live Stream Active')}</span>
         </div>
       </div>
     </div>

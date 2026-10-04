@@ -29,8 +29,8 @@ export function DemoToolbar({
     setSimulatedOffline(nextState);
     showNotice(
       nextState
-        ? 'Simulated Offline: Zero-network mode active'
-        : 'Network Restored: Live synchronization active'
+        ? 'Field Mode: Working offline without network'
+        : 'Network Restored: Syncing with Base Station'
     );
   };
 
@@ -44,7 +44,7 @@ export function DemoToolbar({
         const res = await fetch('/api/demo/conflict', { method: 'POST' });
         if (!res.ok) throw new Error('Server returned ' + res.status);
       }
-      showNotice('⚡ Injected conflicting update from Device-Tablet-02!');
+      showNotice('⚡ Simulated differing field update from Ambulance 04 (Dr. Sunita Rao)');
     } catch (err) {
       console.warn('[DemoToolbar] Conflict simulation fallback:', err.message);
       if (onTriggerConflict) onTriggerConflict();
@@ -55,14 +55,14 @@ export function DemoToolbar({
 
   // 3. 🧹 Clear Demo Data
   const handleClearDemoData = async () => {
-    if (!window.confirm('Reset ResqSync demo state? Both client IndexedDB and server SQLite tables will be wiped clean.')) {
+    if (!window.confirm('Reset ResqSync demo state? Local storage and server records will be reinitialized.')) {
       return;
     }
     setLoadingAction('clear');
     try {
       await clearLocalData();
       await fetch('/api/demo/clear', { method: 'POST' }).catch(() => {});
-      showNotice('🧹 Demo data wiped clean from IndexedDB and SQLite');
+      showNotice('🧹 Demo records reinitialized to initial state');
 
       if (onResetData) {
         onResetData();

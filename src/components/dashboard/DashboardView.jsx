@@ -12,6 +12,7 @@ import {
 import { QuickAddForm } from '../triage/QuickAddForm';
 import { TriageCard } from '../triage/TriageCard';
 import { UX4GButton } from '../common/UX4GButton';
+import { useTranslation } from '../../i18n/LanguageContext';
 
 export function DashboardView({
   records = [],
@@ -27,40 +28,42 @@ export function DashboardView({
   onNavigateToRecords,
   onNavigateToConflicts,
 }) {
+  const { t } = useTranslation();
+
   // 4 Rounded Metric Cards per reference aesthetic: large numbers, concise labels
   const METRICS = [
     {
       id: 'critical',
-      title: 'Critical casualties',
+      title: t('metricCriticalTitle', 'Critical casualties'),
       value: counts.immediate || 0,
-      subtitle: 'Immediate medical priority',
+      subtitle: t('metricCriticalSub', 'Immediate medical priority'),
       icon: AlertCircle,
       iconBg: 'bg-[#FDE3DF] text-[#C94336]',
       borderColor: 'border-[#E6E1DD] hover:border-[#FBCBC4]',
     },
     {
       id: 'evacuation',
-      title: 'Waiting for evacuation',
+      title: t('metricEvacTitle', 'Waiting for evacuation'),
       value: counts.delayed || 0,
-      subtitle: 'Ambulance & transport',
+      subtitle: t('metricEvacSub', 'Ambulance & transport'),
       icon: Truck,
       iconBg: 'bg-[#FEF3C7] text-[#92400E]',
       borderColor: 'border-[#E6E1DD] hover:border-[#FDE68A]',
     },
     {
       id: 'offline',
-      title: 'Saved offline on device',
+      title: t('metricOfflineTitle', 'Saved offline on device'),
       value: pendingCount,
-      subtitle: 'Awaiting network sync',
+      subtitle: t('metricOfflineSub', 'Awaiting network sync'),
       icon: Zap,
       iconBg: 'bg-[#F3F1EF] text-[#66615D]',
       borderColor: 'border-[#E6E1DD]',
     },
     {
       id: 'conflicts',
-      title: 'Conflicts requiring review',
+      title: t('metricConflictTitle', 'Conflicts requiring review'),
       value: conflictCount,
-      subtitle: conflictCount > 0 ? 'Concurrent edits detected' : 'All field edits reconciled',
+      subtitle: conflictCount > 0 ? t('metricConflictSubActive', 'Concurrent edits detected') : t('metricConflictSubNone', 'All field edits reconciled'),
       icon: AlertTriangle,
       iconBg: conflictCount > 0 ? 'bg-[#FDE3DF] text-[#C94336] animate-pulse' : 'bg-[#ECFDF5] text-[#065F46]',
       borderColor: conflictCount > 0 ? 'border-[#FBCBC4] ring-2 ring-[#FDE3DF]' : 'border-[#E6E1DD]',
@@ -83,13 +86,13 @@ export function DashboardView({
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
         <div>
           <span className="text-xs font-bold text-coral uppercase tracking-wider block mb-1">
-            Sector 4 Quake Response • Field Operations
+            NDRF & Health Mission • Wayanad Relief Sector
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
-            Good morning, Responder
+            {t('logbookTitle', 'Field Officer Logbook')}
           </h1>
           <p className="text-xs sm:text-sm text-ink-secondary mt-0.5">
-            Zero-data-loss emergency coordination. Real-time local cache active.
+            {t('logbookSub', 'Offline triage desk. Records save to this handset and auto-upload when cellular or base Wi-Fi connects.')}
           </p>
         </div>
 
@@ -98,12 +101,12 @@ export function DashboardView({
             isOnline ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]' : 'bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]'
           }`}>
             <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-[#4F9D69]' : 'bg-[#E5A33D]'}`} />
-            <span>{isOnline ? 'Command Linked' : 'Offline Safe Mode'}</span>
+            <span>{isOnline ? t('baseLinked', 'Base Station Linked') : t('offlineMode', 'Offline Mode Active')}</span>
           </span>
         </div>
       </div>
 
-      {/* ── 2. Prominent Emergency Card (AidConnect Reference Style) ── */}
+      {/* ── 2. Prominent Emergency Card ── */}
       <div className="bg-coral text-white rounded-3xl p-5 sm:p-7 shadow-aid-raised relative overflow-hidden">
         {/* Soft decorative background rings */}
         <div className="absolute -right-12 -bottom-12 w-64 h-64 rounded-full border border-white/10 pointer-events-none" />
@@ -113,23 +116,23 @@ export function DashboardView({
           <div className="space-y-2 max-w-xl">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/20 text-white">
               <Radio className="w-3.5 h-3.5 animate-pulse" />
-              <span>Priority Action Center</span>
+              <span>{t('startTriageDesk', 'START Triage Desk')}</span>
             </div>
 
             <h2 className="text-xl sm:text-2xl font-black tracking-tight leading-snug">
-              Rapid Field Triage & Victim Registration
+              {t('heroCardTitle', 'Immediate Casualty Registration & Tagging')}
             </h2>
 
             <p className="text-xs sm:text-sm text-white/90 font-medium leading-relaxed">
-              Register casualties instantly without internet connectivity. Records are cryptographically protected and automatically synchronized when networks recover.
+              {t('heroCardDesc', 'Tag arriving casualties with standard color codes right on the field. Records are preserved on this device even without network and sync to Kalpetta hospital as soon as connected.')}
             </p>
           </div>
 
           {/* Quick Emergency Mode Glove Switch */}
           <div className="bg-white/15 border border-white/25 rounded-2xl p-3.5 backdrop-blur-sm self-start md:self-auto flex items-center justify-between gap-4 min-w-[210px]">
             <div>
-              <span className="font-extrabold text-xs block text-white">Glove Mode</span>
-              <span className="text-[11px] text-white/80">56px touch targets</span>
+              <span className="font-extrabold text-xs block text-white">{t('gloveMode', 'Glove Mode')}</span>
+              <span className="text-[11px] text-white/80">{t('gloveModeSub', '56px touch buttons')}</span>
             </div>
 
             <button
@@ -198,7 +201,7 @@ export function DashboardView({
           <div className="flex items-center justify-between">
             <h2 id="urgent-casualties-heading" className="text-base font-bold text-ink flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-coral" />
-              <span>Priority Critical Casualties (Sector 4)</span>
+              <span>{t('urgentHeading', 'Priority Critical Casualties • Wayanad Sector')}</span>
             </h2>
 
             {onNavigateToRecords && (
@@ -206,7 +209,7 @@ export function DashboardView({
                 onClick={onNavigateToRecords}
                 className="text-xs font-bold text-coral hover:text-coral-dark flex items-center gap-1 min-h-[36px]"
               >
-                <span>View All Manifest ({records.length})</span>
+                <span>{t('viewAllManifest', 'View All Manifest')} ({records.length})</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             )}

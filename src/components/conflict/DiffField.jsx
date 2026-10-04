@@ -9,8 +9,8 @@ export function DiffField({
   label,
   valueA,
   valueB,
-  labelA = 'Team Alpha',
-  labelB = 'Team Beta',
+  labelA = 'NDRF Field Unit 1',
+  labelB = 'Ambulance 04',
   isDifferent = false,
   customRenderer,
 }) {

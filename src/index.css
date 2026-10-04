@@ -19,7 +19,7 @@
   --color-critical: #D94343;
   --color-info: #5C83B6;
 
-  --font-family: 'Noto Sans', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+  --font-family: 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
   --radius-sm: 12px;
   --radius-md: 18px;
   --radius-lg: 24px;
@@ -30,7 +30,7 @@ body {
   margin: 0;
   background-color: #F8F7F5;
   color: #171717;
-  font-family: 'Noto Sans', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+  font-family: 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

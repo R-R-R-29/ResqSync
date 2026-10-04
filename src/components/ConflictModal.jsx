@@ -36,7 +36,7 @@ export function ConflictModal({ conflict, isOpen, onClose, onResolved }) {
   const [activeTab, setActiveTab] = useState('compare'); // 'compare' | 'merge'
   const [selectedTriage, setSelectedTriage] = useState(serverLevel);
   const [mergedNotes, setMergedNotes] = useState(
-    `[Device-Tablet-02]: ${server.statusNotes || 'Critical deterioration'}\n[Local Phone]: ${client.statusNotes || 'Stable bleeding control'}`
+    `[Dr. Sunita Rao (Ambulance 04)]: ${server.statusNotes || 'Transit vitals: SpO2 dropped to 84%'}\n[Inspector Rajesh Nair (NDRF QRT)]: ${client.statusNotes || 'Conscious, right leg splinted'}`
   );
   const [isResolving, setIsResolving] = useState(false);
 
@@ -198,7 +198,7 @@ export function ConflictModal({ conflict, isOpen, onClose, onResolved }) {
                     <div>
                       <span className="text-slate-400 block text-[11px]">Victim Name:</span>
                       <span className="font-bold text-white text-sm">
-                        {server.victimName || server.patient_name || 'Marcus Ramirez'}
+                        {server.victimName || server.patient_name || 'Aarav Sharma'}
                       </span>
                     </div>
 
@@ -212,14 +212,14 @@ export function ConflictModal({ conflict, isOpen, onClose, onResolved }) {
                     <div>
                       <span className="text-slate-400 block text-[11px]">Sector Location:</span>
                       <span className="text-slate-200 font-medium">
-                        {server.location || 'Sector 4 - Intensive Care Transit Unit'}
+                        {server.location || 'Chooralmala Transit Ambulance • En route to Kalpetta'}
                       </span>
                     </div>
 
                     <div>
                       <span className="text-slate-400 block text-[11px]">Clinical Notes:</span>
                       <p className="mt-1 p-2 rounded bg-slate-900 border border-slate-800 text-slate-300 leading-relaxed">
-                        {server.statusNotes || 'OVERRIDE BY Device-Tablet-02: Vital signs deteriorating rapidly. SpO2 84%, tension pneumothorax detected.'}
+                        {server.statusNotes || 'Dr. Sunita Rao (Ambulance 04): SpO2 dipped to 84%, breath sounds diminished. Upgraded to RED.'}
                       </p>
                     </div>
                   </div>
@@ -232,7 +232,7 @@ export function ConflictModal({ conflict, isOpen, onClose, onResolved }) {
                   className="mt-4 w-full py-2 px-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs shadow-emergency-glow transition flex items-center justify-center space-x-1.5"
                 >
                   <Check className="w-4 h-4" />
-                  <span>Accept Remote (Device-Tablet-02)</span>
+                  <span>Accept Ambulance 04 (Dr. Sunita Rao)</span>
                 </button>
               </div>
 
@@ -243,7 +243,7 @@ export function ConflictModal({ conflict, isOpen, onClose, onResolved }) {
                     <div className="flex items-center space-x-2">
                       <Smartphone className="w-4 h-4 text-amber-400" />
                       <span className="text-xs font-bold text-slate-200">
-                        This Unit ({client.deviceId || 'Local Phone'})
+                        This Unit ({client.deviceId || 'Field Unit 1'})
                       </span>
                     </div>
                     <span className="text-[10px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded">
@@ -255,7 +255,7 @@ export function ConflictModal({ conflict, isOpen, onClose, onResolved }) {
                     <div>
                       <span className="text-slate-400 block text-[11px]">Victim Name:</span>
                       <span className="font-bold text-white text-sm">
-                        {client.victimName || client.patient_name || 'Marcus Ramirez'}
+                        {client.victimName || client.patient_name || 'Aarav Sharma'}
                       </span>
                     </div>
 
@@ -269,14 +269,14 @@ export function ConflictModal({ conflict, isOpen, onClose, onResolved }) {
                     <div>
                       <span className="text-slate-400 block text-[11px]">Sector Location:</span>
                       <span className="text-slate-200 font-medium">
-                        {client.location || 'Sector 4 - Stairwell B, East Tower'}
+                        {client.location || 'Meppadi Junction • Relief Post 1'}
                       </span>
                     </div>
 
                     <div>
                       <span className="text-slate-400 block text-[11px]">Clinical Notes:</span>
                       <p className="mt-1 p-2 rounded bg-slate-900 border border-slate-800 text-slate-300 leading-relaxed">
-                        {client.statusNotes || 'Local Responder: Conscious, stable breathing, splint applied to left femur.'}
+                        {client.statusNotes || 'Inspector Rajesh Nair (NDRF QRT): Conscious, right leg splinted and dressed. Vitals steady.'}
                       </p>
                     </div>
                   </div>

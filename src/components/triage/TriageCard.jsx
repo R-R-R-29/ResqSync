@@ -51,8 +51,8 @@ export function TriageCard({
         ...record,
         victimName: editName.trim() || record.victimName || 'Casualty',
         patient_name: editName.trim() || record.patient_name || 'Casualty',
-        location: editLocation.trim() || record.location || 'Zone A',
-        field_unit_id: editLocation.trim() || record.field_unit_id || 'Zone A',
+        location: editLocation.trim() || record.location || 'Chooralmala Relief Post',
+        field_unit_id: editLocation.trim() || record.field_unit_id || 'Chooralmala Relief Post',
         statusNotes: editNotes.trim(),
         injuries: editNotes.trim(),
         triageLevel: editLevel,
@@ -88,7 +88,7 @@ export function TriageCard({
           </span>
           <div className="flex items-center space-x-1.5 text-xs text-ink-secondary mt-0.5">
             <MapPin className="w-3.5 h-3.5 text-coral shrink-0" aria-hidden="true" />
-            <span className="font-medium truncate max-w-[200px]">{record.location || record.field_unit_id || 'Zone A — Building 3'}</span>
+            <span className="font-medium truncate max-w-[200px]">{record.location || record.field_unit_id || 'Chooralmala Relief Post • Sector 3'}</span>
           </div>
         </div>
 

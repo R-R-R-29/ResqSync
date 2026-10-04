@@ -76,21 +76,13 @@ export default defineConfig({
         ]
       },
       devOptions: {
-        enabled: true // Allows testing PWA service worker behavior in dev mode
+        enabled: true, // Allows testing PWA service worker behavior in dev mode
+        type: 'module',
       }
     })
   ],
   server: {
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true
-      },
-      '/ws': {
-        target: 'ws://localhost:3001',
-        ws: true
-      }
-    }
+    host: '0.0.0.0',
+    port: 3000,
   }
 });

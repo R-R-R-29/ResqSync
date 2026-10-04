@@ -77,7 +77,8 @@ class SyncService {
         this.ws?.readyState === WebSocket.CONNECTING) return;
 
     const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const url   = `${proto}//${window.location.hostname}:3001/ws`;
+    const host  = window.location.host;
+    const url   = `${proto}//${host}/ws`;
 
     try {
       this.ws = new WebSocket(url);

@@ -79,7 +79,7 @@ export function QuickAddForm({ onSubmit, isOnline = true }) {
 
     const trimmedName = victimName.trim();
     const finalVictimName = trimmedName || `VIC-${Math.floor(1000 + Math.random() * 9000)}`;
-    const finalLocation = location.trim() || 'Sector 4 - Incident Area';
+    const finalLocation = location.trim() || 'Chooralmala Relief Post • Sector 3';
 
     setSubmitting(true);
     try {
@@ -217,7 +217,7 @@ export function QuickAddForm({ onSubmit, isOnline = true }) {
             <input
               id="victim-name-input"
               type="text"
-              placeholder="e.g. Elena Vance or VIC-7402"
+              placeholder="e.g. Priya Murthy or Tag KL-WY-104"
               value={victimName}
               onChange={(e) => setVictimName(e.target.value)}
               className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition"
@@ -233,7 +233,7 @@ export function QuickAddForm({ onSubmit, isOnline = true }) {
             <input
               id="location-input"
               type="text"
-              placeholder="e.g. Sector 4 - Stairwell B, East Tower"
+              placeholder="e.g. Chooralmala Market Junction • Near Bridge"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition"
@@ -250,7 +250,7 @@ export function QuickAddForm({ onSubmit, isOnline = true }) {
           <textarea
             id="status-notes-input"
             rows="2"
-            placeholder="e.g. Airway cleared, heavy bleeding controlled by tourniquet, pulse 110 bpm, responsive to verbal stimuli..."
+            placeholder="e.g. Airway cleared, wound dressed, conscious and responsive to verbal commands..."
             value={statusNotes}
             onChange={(e) => setStatusNotes(e.target.value)}
             className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition resize-none"

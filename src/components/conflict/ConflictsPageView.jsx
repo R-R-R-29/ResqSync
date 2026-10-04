@@ -22,14 +22,14 @@ export function ConflictsPageView({
       <div className="bg-white p-5 sm:p-6 rounded-3xl border border-outline shadow-soft flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-coral uppercase tracking-wider block mb-1">
-            Data Integrity Center
+            Field Record Reconciliation
           </span>
           <h1 className="text-xl sm:text-2xl font-black text-ink tracking-tight flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-coral" aria-hidden="true" />
-            <span>Conflict Resolution Center</span>
+            <span>Field Sync Discrepancy Desk</span>
           </h1>
           <p className="text-xs sm:text-sm text-ink-secondary mt-0.5">
-            Human-centered 3-way reconciliation. Reconcile concurrent offline field modifications.
+            When two rescue units log differing assessments for the same casualty while disconnected, review both log entries here to confirm the authoritative status.
           </p>
         </div>
 
@@ -40,7 +40,7 @@ export function ConflictsPageView({
             icon={Zap}
             onClick={onInjectConflict}
           >
-            Simulate Conflict
+            Simulate Discrepancy
           </UX4GButton>
         )}
       </div>
@@ -111,26 +111,26 @@ export function ConflictsPageView({
                   <div className="p-3.5 rounded-2xl bg-surface-secondary border border-outline">
                     <div className="flex items-center space-x-1.5 font-bold text-ink mb-1">
                       <Smartphone className="w-3.5 h-3.5 text-coral" />
-                      <span>Team Alpha (Local)</span>
+                      <span>Inspector Rajesh Nair (NDRF QRT)</span>
                     </div>
                     <p className="font-bold text-ink uppercase">
                       Triage: {client.triageLevel || 'delayed'}
                     </p>
                     <p className="text-ink-secondary mt-1 line-clamp-2">
-                      {client.statusNotes || 'Initial assessment'}
+                      {client.statusNotes || 'Initial assessment: conscious, compound fracture splinted.'}
                     </p>
                   </div>
 
                   <div className="p-3.5 rounded-2xl bg-surface-secondary border border-outline">
                     <div className="flex items-center space-x-1.5 font-bold text-ink mb-1">
                       <Server className="w-3.5 h-3.5 text-coral" />
-                      <span>Team Beta (Remote Override)</span>
+                      <span>Dr. Sunita Rao (Ambulance 04)</span>
                     </div>
                     <p className="font-bold text-coral uppercase">
                       Triage: {server.triageLevel || 'immediate'}
                     </p>
                     <p className="text-ink-secondary mt-1 line-clamp-2">
-                      {server.statusNotes || 'Updated field condition'}
+                      {server.statusNotes || 'Transit vitals: SpO2 dropped to 84%, breath sounds diminished.'}
                     </p>
                   </div>
                 </div>

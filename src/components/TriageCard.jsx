@@ -87,10 +87,10 @@ export function TriageCard({ record, onUpdate, onDelete }) {
       const now = new Date().toISOString();
       const updatedRecord = {
         ...record,
-        victimName: editName.trim() || record.victimName || 'Unidentified Victim',
-        patient_name: editName.trim() || record.patient_name || 'Unidentified Victim',
-        location: editLocation.trim() || record.location || 'Sector 4',
-        field_unit_id: editLocation.trim() || record.field_unit_id || 'Sector 4',
+        victimName: editName.trim() || record.victimName || 'Unidentified Casualty',
+        patient_name: editName.trim() || record.patient_name || 'Unidentified Casualty',
+        location: editLocation.trim() || record.location || 'Chooralmala Relief Post • Sector 3',
+        field_unit_id: editLocation.trim() || record.field_unit_id || 'Chooralmala Relief Post • Sector 3',
         statusNotes: editNotes.trim(),
         injuries: editNotes.trim(),
         triageLevel: editLevel,
@@ -273,7 +273,7 @@ export function TriageCard({ record, onUpdate, onDelete }) {
           <div className="flex items-center space-x-2">
             <User className="w-4 h-4 text-slate-400 shrink-0" />
             <h3 className="font-extrabold text-base text-white tracking-tight leading-snug">
-              {record.victimName || record.patient_name || 'Unidentified Victim'}
+              {record.victimName || record.patient_name || 'Unidentified Casualty'}
             </h3>
           </div>
 
@@ -281,7 +281,7 @@ export function TriageCard({ record, onUpdate, onDelete }) {
           <div className="flex items-center space-x-2 text-xs text-slate-300">
             <MapPin className="w-3.5 h-3.5 text-red-400/80 shrink-0" />
             <span className="font-medium text-slate-300">
-              {record.location || record.field_unit_id || 'Sector 4 - Incident Perimeter'}
+              {record.location || record.field_unit_id || 'Chooralmala Relief Post • Sector 3'}
             </span>
           </div>
 

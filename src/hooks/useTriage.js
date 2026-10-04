@@ -52,9 +52,9 @@ export function useTriage() {
    */
   const addTriage = useCallback(async (formData) => {
     const now = new Date().toISOString();
-    const victimName = formData.victimName || formData.patient_name || 'Unidentified Victim';
+    const victimName = formData.victimName || formData.patient_name || 'Unidentified Casualty';
     const triageLevel = (formData.triageLevel || formData.triage_category || 'immediate').toLowerCase();
-    const location = formData.location || formData.field_unit_id || 'Sector 4';
+    const location = formData.location || formData.field_unit_id || 'Chooralmala Relief Post • Sector 3';
     const notes = formData.statusNotes || formData.injuries || '';
     const deviceId = formData.deviceId || localStorage.getItem('resqsync_device_id') || 'FIELD-TERM-1';
 
@@ -77,7 +77,7 @@ export function useTriage() {
       mental_status: formData.mental_status || 'Alert',
       field_unit_id: location,
       deviceId,
-      responderId: formData.responderId || 'FIELD-UNIT-1',
+      responderId: formData.responderId || 'NDRF-QRT-ALPHA',
       latitude: formData.latitude || null,
       longitude: formData.longitude || null,
       status: 'pending',
@@ -112,9 +112,9 @@ export function useTriage() {
   const updateTriage = useCallback(async (updatedData) => {
     const now = new Date().toISOString();
     const triageLevel = (updatedData.triageLevel || updatedData.triage_category || 'immediate').toLowerCase();
-    const victimName = updatedData.victimName || updatedData.patient_name || 'Unidentified Victim';
+    const victimName = updatedData.victimName || updatedData.patient_name || 'Unidentified Casualty';
     const notes = updatedData.statusNotes ?? updatedData.injuries ?? '';
-    const location = updatedData.location ?? updatedData.field_unit_id ?? 'Sector 4';
+    const location = updatedData.location ?? updatedData.field_unit_id ?? 'Chooralmala Relief Post • Sector 3';
 
     const merged = {
       ...updatedData,
@@ -168,37 +168,37 @@ export function useTriage() {
   const seedDemoData = useCallback(async () => {
     const samples = [
       {
-        victimName: 'Sarah Jenkins',
+        victimName: 'Priya Murthy',
         triageLevel: 'immediate',
-        location: 'Sector 4 - Subway Collapsed Concourse',
-        statusNotes: 'Open pneumothorax, shallow breathing at 34/min, weak radial pulse.',
+        location: 'Chooralmala Market Junction • Near Bridge',
+        statusNotes: 'Blunt chest trauma from falling timber, labored breathing at 34/min, weak radial pulse. Portable oxygen started.',
         respiration_rate: 34,
-        pulse_rate: 130,
+        pulse_rate: 128,
         mental_status: 'Confused',
       },
       {
-        victimName: 'Marcus Ramirez',
+        victimName: 'Aarav Sharma',
         triageLevel: 'delayed',
-        location: 'Sector 4 - East Wing Stairwell 2',
-        statusNotes: 'Compound tibia fracture, severe hemorrhage controlled with field tourniquet.',
+        location: 'Vellarmala School Road • Sector 3',
+        statusNotes: 'Compound tibia fracture, severe hemorrhage stopped with sterile pressure dressing and improvised splint.',
         respiration_rate: 22,
-        pulse_rate: 96,
+        pulse_rate: 94,
         mental_status: 'Alert',
       },
       {
-        victimName: 'Elena Rostova',
+        victimName: 'Mohammed Farooq',
         triageLevel: 'minor',
-        location: 'Sector 4 - Safe Assembly Point A',
-        statusNotes: 'Walking wounded. Superficial facial lacerations, mild smoke inhalation.',
+        location: 'Meppadi Relief Camp • Assembly Ground',
+        statusNotes: 'Walking casualty. Superficial scalp lacerations, mild debris smoke inhalation. Cleaned and dressed.',
         respiration_rate: 18,
-        pulse_rate: 82,
+        pulse_rate: 80,
         mental_status: 'Alert',
       },
       {
-        victimName: 'Unidentified Male (VIC-408)',
+        victimName: 'Unidentified Female (Tag KL-WY-104)',
         triageLevel: 'expectant',
-        location: 'Sector 4 - Structural Void C-9',
-        statusNotes: 'Massive cranial trauma, apnea despite airway repositioning, pulseless.',
+        location: 'Mundakkai Estate Quarters • Riverbank',
+        statusNotes: 'Severe cranial trauma from debris flow. Apnea despite airway repositioning, pulseless on arrival.',
         respiration_rate: 0,
         pulse_rate: 0,
         mental_status: 'Unresponsive',
